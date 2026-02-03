@@ -1,0 +1,204 @@
+/* ===========================================
+   Navbar Component Styles
+   =========================================== */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-default);
+    backdrop-filter: blur(8px);
+}
+
+.nav {
+    max-width: var(--max-width-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+}
+
+/* ========================================
+   Logo
+   ======================================== */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-lg);
+}
+
+.logoIcon {
+    color: var(--purple-500);
+}
+
+.logoText {
+    letter-spacing: -0.02em;
+}
+
+/* ========================================
+   Desktop Navigation
+   ======================================== */
+.desktopNav {
+    display: none;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+@media (min-width: 768px) {
+    .desktopNav {
+        display: flex;
+    }
+}
+
+.navLink {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.navLink:hover {
+    color: var(--text-primary);
+    background-color: var(--interactive-hover);
+}
+
+.navLink.active {
+    color: var(--purple-500);
+    background-color: var(--brand-subtle);
+}
+
+/* ========================================
+   Actions
+   ======================================== */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.themeToggle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.themeToggle:hover {
+    color: var(--text-primary);
+    background-color: var(--interactive-hover);
+}
+
+.loginLink {
+    display: none;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.loginLink:hover {
+    color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+    .loginLink {
+        display: block;
+    }
+}
+
+.ctaButton {
+    display: none;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: white;
+    background-color: var(--purple-500);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+}
+
+.ctaButton:hover {
+    background-color: var(--purple-600);
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .ctaButton {
+        display: block;
+    }
+}
+
+/* ========================================
+   Mobile Menu
+   ======================================== */
+.mobileMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    .mobileMenuButton {
+        display: none;
+    }
+}
+
+.mobileNav {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--border-default);
+    background-color: var(--bg-surface);
+}
+
+@media (min-width: 768px) {
+    .mobileNav {
+        display: none;
+    }
+}
+
+.mobileNavLink {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.mobileNavLink:hover,
+.mobileNavLink.active {
+    color: var(--text-primary);
+    background-color: var(--interactive-hover);
+}
+
+.mobileNavLink.active {
+    color: var(--purple-500);
+}

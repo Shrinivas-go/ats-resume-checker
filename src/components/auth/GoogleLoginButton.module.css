@@ -1,0 +1,14 @@
+.googleButtonWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.googleButtonWrapper>div {
+    width: 100%;
+}
+
+/* Override Google button styles for better integration */
+.googleButtonWrapper iframe {
+    width: 100% !important;
+}

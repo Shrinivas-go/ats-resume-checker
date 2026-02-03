@@ -1,0 +1,161 @@
+.previewContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+
+.a4Page {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 20mm;
+    margin: 0 auto;
+    font-family: 'Times New Roman', Times, serif;
+    /* Classic resume font or make configurable */
+    color: #333;
+    box-sizing: border-box;
+}
+
+/* Transform for scaling if needed on small screens
+   But usually we just let it scroll or scale via container */
+
+.header {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.headerTop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.profileImage {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+
+.name {
+    font-size: 24pt;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.jobTitle {
+    font-size: 14pt;
+    font-weight: 500;
+    color: #555;
+    margin: 5px 0 0;
+}
+
+.contactLine {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    font-size: 10pt;
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.sectionTitle {
+    font-size: 14pt;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 12px 0;
+    padding-bottom: 4px;
+    font-weight: 700;
+}
+
+.sectionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Experience */
+.experienceItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2px;
+}
+
+.itemTitle {
+    font-size: 12pt;
+    font-weight: 700;
+    margin: 0;
+}
+
+.itemDuration {
+    font-size: 10pt;
+    font-style: italic;
+    white-space: nowrap;
+}
+
+.itemSubHeader {
+    font-size: 11pt;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+}
+
+.itemDescription {
+    font-size: 10pt;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre-line;
+    /* Preserve newlines */
+}
+
+/* Education */
+.educationItem {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Skills */
+.skillsText {
+    font-size: 10pt;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Certifications */
+.certItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10pt;
+}
+
+.certName {
+    font-weight: 600;
+}
+
+.certDetails {
+    font-style: italic;
+}

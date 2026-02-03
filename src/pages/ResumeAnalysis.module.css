@@ -1,0 +1,536 @@
+/* ... existing styles ... */
+/* Append this to existing file or replace if small? Best to append new styles */
+
+/* ===========================================
+   Resume Analysis Page Styles (Enhanced)
+   =========================================== */
+
+/* ... (Previous styles) ... */
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-page);
+}
+
+.main {
+    flex: 1;
+    padding: var(--space-8) 0;
+}
+
+.container {
+    max-width: var(--max-width-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2) 0;
+}
+
+.subtitle {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.alert {
+    max-width: 600px;
+    margin: 0 auto var(--space-6);
+}
+
+/* ========================================
+   Grid Layout
+   ======================================== */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+.inputColumn {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.resultColumn {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* ========================================
+   Dropzone
+   ======================================== */
+.dropzone {
+    border: 2px dashed var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-10);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.dropzone:hover {
+    border-color: var(--purple-400);
+    background-color: var(--brand-subtle);
+}
+
+.fileInput {
+    display: none;
+}
+
+.uploadIcon {
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-3);
+}
+
+.dropzoneText {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.dropzoneText span {
+    color: var(--purple-500);
+    font-weight: var(--font-medium);
+}
+
+/* ========================================
+   File Preview
+   ======================================== */
+.filePreview {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--bg-surface-secondary);
+    border-radius: var(--radius-md);
+}
+
+.fileIcon {
+    color: var(--purple-500);
+    flex-shrink: 0;
+}
+
+.fileInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.fileName {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fileSize {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    margin: var(--space-1) 0 0 0;
+}
+
+.removeFile {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.removeFile:hover {
+    color: var(--error);
+    background-color: var(--error-light);
+}
+
+.parseButton {
+    margin-top: var(--space-4);
+}
+
+.parsedSuccess {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--success);
+    background-color: var(--success-light);
+    border-radius: var(--radius-md);
+}
+
+[data-theme="dark"] .parsedSuccess {
+    background-color: rgba(34, 197, 94, 0.15);
+}
+
+.analyzeButton {
+    margin-top: var(--space-4);
+}
+
+/* ========================================
+   Results
+   ======================================== */
+.scoreCard {
+    text-align: center;
+}
+
+.scoreHeader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+}
+
+.feedback {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+}
+
+.skillsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.skillTip {
+    margin: var(--space-4) 0 0 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* ========================================
+   New Analysis Styles
+   ======================================== */
+.scoreBreakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-default);
+}
+
+.breakdownItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.breakdownLabel {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+}
+
+.breakdownValue {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+.issueList,
+.recList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.issueItem {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background-color: var(--bg-surface-secondary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--border-default);
+}
+
+.issueItem.critical {
+    border-left-color: var(--error);
+    background-color: var(--error-light);
+}
+
+[data-theme="dark"] .issueItem.critical {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.issueItem.warning {
+    border-left-color: var(--warning);
+    background-color: var(--warning-light);
+}
+
+[data-theme="dark"] .issueItem.warning {
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.issueIcon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.issueContent h4 {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    margin: 0 0 var(--space-1) 0;
+    color: var(--text-primary);
+}
+
+.issueContent p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: var(--leading-normal);
+}
+
+.recItem {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+.recIcon {
+    color: var(--success);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-16);
+    background-color: var(--bg-surface);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-lg);
+}
+
+.emptyIcon {
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-4);
+}
+
+.emptyState h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2) 0;
+}
+
+.emptyState p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ========================================
+   Locked State (Auth-Aware UX)
+   ======================================== */
+.lockedState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-12) var(--space-6);
+    background-color: var(--bg-surface-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-default);
+    min-height: 300px;
+}
+
+.lockIcon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--brand-subtle);
+    color: var(--purple-500);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-6);
+}
+
+.lockedState h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2) 0;
+}
+
+.lockedState p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0 0 var(--space-6) 0;
+    max-width: 320px;
+}
+
+.authButtons {
+    display: flex;
+    gap: var(--space-3);
+}
+
+/* ========================================
+   Enhanced Insights Styles
+   ======================================== */
+.insightGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.insightItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--bg-surface-secondary);
+    border-radius: var(--radius-md);
+    transition: transform 0.2s ease;
+}
+
+.insightItem:hover {
+    transform: translateY(-2px);
+}
+
+.insightIconWrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-default);
+    color: var(--purple-500);
+}
+
+.insightContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.insightLabel {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    font-weight: var(--font-semibold);
+}
+
+.insightValue {
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+/* ========================================
+   Section Analysis Styles
+   ======================================== */
+.sectionGrid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.sectionItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sectionName {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+}
+
+.sectionSuccess {
+    color: var(--success);
+}
+
+.sectionWarning {
+    color: var(--warning);
+}
+
+.progressBar {
+    width: 100%;
+    height: 6px;
+    background-color: var(--bg-surface-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 1s ease-out;
+}
+
+.downloadButton {
+    margin-top: var(--space-6);
+    width: 100%;
+}
+
+.builderPrompt {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px dashed var(--border-default);
+    text-align: center;
+}
+
+.builderPrompt p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-3) 0;
+}

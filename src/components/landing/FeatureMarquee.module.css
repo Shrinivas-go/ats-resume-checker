@@ -1,0 +1,119 @@
+/* ===========================================
+   Feature Marquee Styles
+   =========================================== */
+
+.marqueeSection {
+    padding: var(--space-8) 0;
+    background: linear-gradient(to bottom,
+            var(--bg-page),
+            var(--bg-surface-secondary) 50%,
+            var(--bg-page));
+    overflow: hidden;
+}
+
+.marqueeContainer {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Gradient fade effects */
+.fadeLeft,
+.fadeRight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.fadeLeft {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-page), transparent);
+}
+
+.fadeRight {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-page), transparent);
+}
+
+/* Marquee track */
+.marqueeTrack {
+    display: flex;
+    gap: var(--space-4);
+    width: fit-content;
+    will-change: transform;
+}
+
+.marqueeTrack:hover {
+    animation-play-state: paused !important;
+}
+
+/* Feature items */
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.featureItem:hover {
+    border-color: var(--feature-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--feature-color), var(--feature-color));
+    opacity: 0.9;
+}
+
+.iconWrapper svg {
+    color: white;
+}
+
+.label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+
+    .fadeLeft,
+    .fadeRight {
+        width: 40px;
+    }
+
+    .featureItem {
+        padding: var(--space-2) var(--space-4);
+    }
+
+    .iconWrapper {
+        width: 28px;
+        height: 28px;
+    }
+
+    .iconWrapper svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .label {
+        font-size: var(--text-xs);
+    }
+}
