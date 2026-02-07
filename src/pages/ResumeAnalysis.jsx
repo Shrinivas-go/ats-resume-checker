@@ -11,10 +11,12 @@ import Textarea from '../components/ui/Textarea';
 import Badge from '../components/ui/Badge';
 import Alert from '../components/ui/Alert';
 import ScoreRing from '../components/ui/ScoreRing';
+import ScanningAnimation from '../components/ui/ScanningAnimation';
+import AIAssistant from '../components/AIAssistant/AIAssistant';
 import { useAuth } from '../context/AuthContext';
 import styles from './ResumeAnalysis.module.css';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Helper: Calculate Readability (Simplified Flesch-Kincaid-ish)
 const calculateReadability = (text) => {
@@ -703,11 +705,20 @@ export default function ResumeAnalysis() {
                                         animate={{ opacity: 1 }}
                                         className={styles.emptyState}
                                     >
-                                        <div className={styles.emptyIcon}>
-                                            <FileText size={48} />
-                                        </div>
-                                        <h3>Start Your Analysis</h3>
-                                        <p>Upload a resume and job description to get a detailed ATS score.</p>
+                                        {loading.analyzing ? (
+                                            <ScanningAnimation
+                                                fileName={file?.name || 'Resume'}
+                                                stage="matching"
+                                            />
+                                        ) : (
+                                            <>
+                                                <div className={styles.emptyIcon}>
+                                                    <FileText size={48} />
+                                                </div>
+                                                <h3>Start Your Analysis</h3>
+                                                <p>Upload a resume and job description to get a detailed ATS score.</p>
+                                            </>
+                                        )}
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -715,6 +726,12 @@ export default function ResumeAnalysis() {
                     </div>
                 </div>
             </main>
+
+            {/* AI Assistant Chat */}
+            <AIAssistant
+                analysisResult={analysisResult}
+                isVisible={!!analysisResult}
+            />
         </div>
     );
 }

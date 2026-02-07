@@ -65,9 +65,11 @@
 }
 
 .featureItem:hover {
-    border-color: var(--feature-color);
+    border-color: var(--purple-500);
+    border-width: 2px;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+    background: var(--bg-surface);
 }
 
 .iconWrapper {

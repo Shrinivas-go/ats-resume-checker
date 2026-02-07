@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Star, Quote, ArrowRight, PenLine } from 'lucide-react';
 import Card from '../ui/Card';
+import Button from '../ui/Button';
 import styles from './TestimonialsSection.module.css';
 
 const TESTIMONIALS = [
@@ -48,12 +50,14 @@ export default function TestimonialsSection() {
                             transition={{ delay: index * 0.1 }}
                         >
                             <Card className={styles.card}>
-                                <div className={styles.rating}>
-                                    {[...Array(testimonial.rating)].map((_, i) => (
-                                        <Star key={i} size={16} fill="#f59e0b" color="#f59e0b" />
-                                    ))}
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.rating}>
+                                        {[...Array(testimonial.rating)].map((_, i) => (
+                                            <Star key={i} size={16} fill="#f59e0b" color="#f59e0b" />
+                                        ))}
+                                    </div>
+                                    <Quote size={24} className={styles.quoteIcon} />
                                 </div>
-                                <Quote size={24} className={styles.quoteIcon} />
                                 <p className={styles.content}>"{testimonial.content}"</p>
                                 <div className={styles.author}>
                                     <img
@@ -69,6 +73,18 @@ export default function TestimonialsSection() {
                             </Card>
                         </motion.div>
                     ))}
+                </div>
+
+                {/* Review Action Buttons */}
+                <div className={styles.actions}>
+                    <Link to="/blog">
+                        <Button variant="secondary" icon={ArrowRight} iconPosition="right">
+                            View More Reviews
+                        </Button>
+                    </Link>
+                    <Button variant="outline" icon={PenLine}>
+                        Write a Review
+                    </Button>
                 </div>
             </div>
         </section>

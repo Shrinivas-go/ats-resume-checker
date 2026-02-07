@@ -1,35 +1,87 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000';
-// const API_URL = 'https://ats-backend-production-c4ad.up.railway.app';
+// Use environment variable for API URL, fallback to localhost for development
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const AuthContext = createContext(undefined);
 
+/**
+ * Simplified AuthContext - Production-grade, predictable auth
+ * 
+ * Principles:
+ * - Single source of truth for user state
+ * - No complex auto-refresh logic (refresh on explicit actions only)
+ * - Clear loading states
+ * - Predictable behavior
+ */
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Configure axios defaults
-    useEffect(() => {
-        axios.defaults.withCredentials = true; // Send cookies with requests
+    // Axios instance with credentials
+    const api = useRef(
+        axios.create({
+            baseURL: API_URL,
+            withCredentials: true,
+        })
+    ).current;
+
+    /**
+     * Clear all auth state (internal helper)
+     */
+    const clearAuth = useCallback(() => {
+        setUser(null);
+        setError(null);
     }, []);
 
-    // Check if user is logged in on mount
+    /**
+     * Logout - clears cookies and state
+     */
+    const logout = useCallback(async () => {
+        try {
+            await api.post('/auth/logout');
+        } catch {
+            // Ignore errors - still clear local state
+        }
+        clearAuth();
+    }, [api, clearAuth]);
+
+    /**
+     * Check auth status on mount
+     * Simple: try /auth/me, if fails set user to null
+     */
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                // Try to get current user - cookie will be sent automatically
-                const response = await axios.get(`${API_URL}/auth/me`);
-                if (response.data.success) {
+                const response = await api.get('/auth/me');
+                if (response.data.success && response.data.user) {
                     setUser(response.data.user);
+                } else {
+                    setUser(null);
                 }
             } catch (err) {
-                // If /me fails (401), try to refresh the token
-                // We don't check for local token existence anymore since it's a cookie
-                const refreshed = await refreshToken();
-                if (!refreshed) {
+                // If access token expired, try to refresh once
+                if (err.response?.status === 401) {
+                    try {
+                        const refreshResponse = await api.post('/auth/refresh');
+                        if (refreshResponse.data.success) {
+                            // Retry getting user after refresh
+                            const retryResponse = await api.get('/auth/me');
+                            if (retryResponse.data.success && retryResponse.data.user) {
+                                setUser(retryResponse.data.user);
+                            } else {
+                                setUser(null);
+                            }
+                        } else {
+                            setUser(null);
+                        }
+                    } catch {
+                        // Refresh failed - user is not logged in
+                        setUser(null);
+                    }
+                } else {
                     setUser(null);
                 }
             } finally {
@@ -38,41 +90,43 @@ export function AuthProvider({ children }) {
         };
 
         checkAuth();
-    }, []);
+    }, [api]);
 
+    /**
+     * Register new user
+     */
     const register = async (name, email, password) => {
         try {
             setError(null);
-            const response = await axios.post(`${API_URL}/auth/register`, {
-                name,
-                email,
-                password,
-            });
+            console.log('DEBUG: API_URL is:', API_URL);
+            console.log('DEBUG: Calling /auth/register with:', { name, email });
+            const response = await api.post('/auth/register', { name, email, password });
+            console.log('DEBUG: Response:', response.data);
 
             if (response.data.success) {
                 setUser(response.data.user);
-                // Cookies are set by the backend automatically
                 return { success: true };
             }
             return { success: false, message: response.data.message };
         } catch (err) {
+            console.error('DEBUG: Error:', err);
+            console.error('DEBUG: Error response:', err.response?.data);
             const message = err.response?.data?.message || 'Registration failed';
             setError(message);
             return { success: false, message };
         }
     };
 
+    /**
+     * Login user
+     */
     const login = async (email, password) => {
         try {
             setError(null);
-            const response = await axios.post(`${API_URL}/auth/login`, {
-                email,
-                password,
-            });
+            const response = await api.post('/auth/login', { email, password });
 
             if (response.data.success) {
                 setUser(response.data.user);
-                // Cookies are set by the backend automatically
                 return { success: true };
             }
             return { success: false, message: response.data.message };
@@ -83,45 +137,16 @@ export function AuthProvider({ children }) {
         }
     };
 
-    const logout = async () => {
-        try {
-            await axios.post(`${API_URL}/auth/logout`);
-        } catch (err) {
-            // Ignore errors on logout
-        } finally {
-            setUser(null);
-            // Cookies are cleared by the backend
-        }
-    };
-
-    const refreshToken = async () => {
-        try {
-            // Cookie is sent automatically
-            const response = await axios.post(`${API_URL}/auth/refresh`);
-
-            if (response.data.success) {
-                // New access token cookie set by backend
-                // If we need to update user state immediately, we could do it here
-                // but usually the next request will just work.
-                // We might want to reload the user if needed, but for now just returning true.
-                return true;
-            }
-            return false;
-        } catch (err) {
-            return false;
-        }
-    };
-
+    /**
+     * Google OAuth login
+     */
     const googleLogin = async (credential) => {
         try {
             setError(null);
-            const response = await axios.post(`${API_URL}/auth/google`, {
-                credential,
-            });
+            const response = await api.post('/auth/google', { credential });
 
             if (response.data.success) {
                 setUser(response.data.user);
-                // Cookies are set by the backend automatically
                 return { success: true, isNewUser: response.data.isNewUser };
             }
             return { success: false, message: response.data.message };
@@ -140,7 +165,6 @@ export function AuthProvider({ children }) {
         register,
         login,
         logout,
-        refreshToken,
         googleLogin,
     };
 

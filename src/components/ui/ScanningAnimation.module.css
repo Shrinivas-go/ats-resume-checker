@@ -1,0 +1,141 @@
+/* ScanningAnimation Styles */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    min-height: 300px;
+}
+
+/* Document */
+.documentWrapper {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.document {
+    width: 120px;
+    height: 160px;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.scanLine {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--accent-color) 50%,
+            transparent 100%);
+    box-shadow: 0 0 15px var(--accent-color), 0 0 30px var(--accent-color);
+    z-index: 10;
+}
+
+.docContent {
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.docLine {
+    height: 6px;
+    background: linear-gradient(90deg,
+            rgba(var(--accent-rgb), 0.15) 0%,
+            rgba(var(--accent-rgb), 0.08) 100%);
+    border-radius: 3px;
+}
+
+.fileOverlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: var(--accent-color);
+    opacity: 0.6;
+}
+
+/* Status */
+.status {
+    text-align: center;
+    z-index: 5;
+}
+
+.statusText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.zapIcon {
+    color: var(--accent-color);
+    animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.progressTrack {
+    width: 200px;
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-color), #a855f7);
+    border-radius: 2px;
+}
+
+.fileName {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Particles */
+.particles {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 0.6;
+}

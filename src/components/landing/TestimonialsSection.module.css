@@ -106,3 +106,31 @@
     color: var(--text-tertiary);
     margin: 0;
 }
+
+/* Card header for star rating and quote icon */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+}
+
+.cardHeader .quoteIcon {
+    position: static;
+}
+
+/* Action buttons */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+    .actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}

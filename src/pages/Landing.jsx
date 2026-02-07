@@ -77,25 +77,28 @@ const showcaseFeatures = [
     }
 ];
 
-// Blog/Learn preview data
+// Blog/Learn preview data with real images
 const blogPreviews = [
     {
         title: "10 ATS-Friendly Resume Tips for 2026",
         excerpt: "Learn the latest strategies to ensure your resume passes automated screening systems.",
         category: "Resume Tips",
-        readTime: "5 min read"
+        readTime: "5 min read",
+        image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=600"
     },
     {
         title: "Keywords That Get You Hired",
         excerpt: "Discover which action verbs and industry terms make the biggest impact.",
         category: "Career Advice",
-        readTime: "4 min read"
+        readTime: "4 min read",
+        image: "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&w=600"
     },
     {
         title: "Common Resume Mistakes to Avoid",
         excerpt: "Stop making these formatting errors that get resumes instantly rejected.",
         category: "Best Practices",
-        readTime: "6 min read"
+        readTime: "6 min read",
+        image: "https://images.pexels.com/photos/5668858/pexels-photo-5668858.jpeg?auto=compress&cs=tinysrgb&w=600"
     }
 ];
 
@@ -297,9 +300,11 @@ export default function Landing() {
                                     Expert tips to boost your job search success.
                                 </p>
                             </div>
-                            <Button variant="secondary" icon={BookOpen}>
-                                View All Articles
-                            </Button>
+                            <Link to="/blog">
+                                <Button variant="secondary" icon={BookOpen}>
+                                    View All Articles
+                                </Button>
+                            </Link>
                         </motion.div>
 
                         <motion.div
@@ -315,9 +320,13 @@ export default function Landing() {
                                     className={styles.blogCard}
                                     variants={staggerItem}
                                 >
-                                    <div className={styles.blogImagePlaceholder}>
-                                        <BookOpen size={32} />
-                                    </div>
+                                    <Link to="/blog" className={styles.blogImageWrapper}>
+                                        <img
+                                            src={post.image}
+                                            alt={post.title}
+                                            className={styles.blogImage}
+                                        />
+                                    </Link>
                                     <div className={styles.blogContent}>
                                         <div className={styles.blogMeta}>
                                             <span className={styles.blogCategory}>{post.category}</span>
@@ -325,9 +334,9 @@ export default function Landing() {
                                         </div>
                                         <h3 className={styles.blogTitle}>{post.title}</h3>
                                         <p className={styles.blogExcerpt}>{post.excerpt}</p>
-                                        <span className={styles.blogLink}>
+                                        <Link to="/blog" className={styles.blogLink}>
                                             Read more <ArrowRight size={14} />
-                                        </span>
+                                        </Link>
                                     </div>
                                 </motion.article>
                             ))}

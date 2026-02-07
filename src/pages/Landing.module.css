@@ -779,6 +779,27 @@
     color: var(--purple-400);
 }
 
+.blogImageWrapper {
+    display: block;
+    height: 180px;
+    overflow: hidden;
+}
+
+.blogImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.blogCard:hover .blogImage {
+    transform: scale(1.05);
+}
+
+.blogLink {
+    text-decoration: none;
+}
+
 .blogContent {
     padding: var(--space-6);
 }
