@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8F86FF"/>
+      <stop offset="100%" style="stop-color:#5B4EDC"/>
+    </linearGradient>
+    <linearGradient id="check" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#E8E6FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect x="16" y="16" width="480" height="480" rx="96" ry="96" fill="url(#bg)"/>
+  <!-- Document icon (white page) -->
+  <path d="M160 96 h128 l80 80 v240 c0 17.7-14.3 32-32 32 H160 c-17.7 0-32-14.3-32-32 V128 c0-17.7 14.3-32 32-32z" fill="white" opacity="0.95"/>
+  <!-- Folded corner -->
+  <path d="M288 96 v48 c0 17.7 14.3 32 32 32 h48 z" fill="#CFCBFF"/>
+  <!-- Checkmark circle -->
+  <circle cx="340" cy="360" r="72" fill="url(#bg)" stroke="white" stroke-width="6"/>
+  <!-- Checkmark -->
+  <polyline points="308,360 330,384 372,336" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Text lines on document -->
+  <rect x="168" y="200" width="140" height="12" rx="6" fill="#CFCBFF"/>
+  <rect x="168" y="232" width="110" height="12" rx="6" fill="#CFCBFF"/>
+  <rect x="168" y="264" width="80" height="12" rx="6" fill="#CFCBFF"/>
+</svg>
