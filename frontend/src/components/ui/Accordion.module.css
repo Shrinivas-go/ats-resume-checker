@@ -1,0 +1,104 @@
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.accordionItem {
+    background: var(--color-surface, var(--bg-surface));
+    border: 1px solid var(--color-border, var(--border-default));
+    border-radius: var(--radius-lg, 12px);
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.accordionItem:hover {
+    border-color: var(--color-border-hover, var(--purple-300));
+}
+
+.accordionItem.open {
+    border-color: var(--color-primary, var(--purple-500));
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+}
+
+.accordionHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    gap: 1rem;
+    transition: background-color 0.15s ease;
+}
+
+.accordionHeader:hover {
+    background-color: var(--color-surface-hover, rgba(0, 0, 0, 0.02));
+}
+
+[data-theme="dark"] .accordionHeader:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.accordionQuestion {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary, var(--text-primary));
+    line-height: 1.4;
+}
+
+.accordionIcon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-surface-secondary, var(--bg-surface-secondary));
+    color: var(--color-text-secondary, var(--text-secondary));
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.accordionItem.open .accordionIcon {
+    background: var(--color-primary, var(--purple-500));
+    color: white;
+}
+
+.accordionContent {
+    overflow: hidden;
+}
+
+.accordionAnswer {
+    padding: 0 1.5rem 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary, var(--text-secondary));
+}
+
+/* Focus styles for accessibility */
+.accordionHeader:focus-visible {
+    outline: 2px solid var(--color-primary, var(--purple-500));
+    outline-offset: -2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .accordionHeader {
+        padding: 1rem 1.25rem;
+    }
+
+    .accordionQuestion {
+        font-size: 0.95rem;
+    }
+
+    .accordionAnswer {
+        padding: 0 1.25rem 1rem;
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,224 @@
+/* Dashboard Page Styles */
+
+.dashboard {
+    min-height: calc(100vh - 64px);
+    padding: var(--space-8) var(--space-6);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Welcome Section */
+.welcome {
+    margin-bottom: var(--space-8);
+    text-align: center;
+}
+
+.welcomeTitle {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.userName {
+    color: var(--purple-500);
+}
+
+.welcomeSubtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+}
+
+/* Cards Section */
+.cardsSection {
+    margin-bottom: var(--space-8);
+}
+
+.sectionTitle {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+}
+
+.cardsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+    .cardsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    position: relative;
+}
+
+.cardIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.cardLabel {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.cardValue {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+.cardLink {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--purple-500);
+    text-decoration: none;
+    font-weight: var(--font-medium);
+}
+
+.cardLink:hover {
+    text-decoration: underline;
+}
+
+/* CTA Section */
+.ctaSection {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-8);
+}
+
+.ctaButton {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-8);
+    background: var(--purple-500);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    transition: background var(--transition-fast);
+}
+
+.ctaButton:hover {
+    background: var(--purple-600);
+}
+
+/* History Section */
+.historySection {
+    margin-bottom: var(--space-8);
+}
+
+.historyList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.historyItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition-fast);
+}
+
+.historyItem:hover {
+    border-color: var(--purple-300);
+}
+
+.historyIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--brand-subtle);
+    color: var(--purple-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.historyDetails {
+    flex: 1;
+    min-width: 0;
+}
+
+.historyFilename {
+    display: block;
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.historyDate {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    margin-top: var(--space-1);
+}
+
+.historyScore {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    flex-shrink: 0;
+}
+
+/* Empty Section */
+.emptySection {
+    text-align: center;
+    padding: var(--space-12);
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-xl);
+}
+
+.emptyIcon {
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+}
+
+.emptySection h3 {
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.emptySection p {
+    color: var(--text-secondary);
+}

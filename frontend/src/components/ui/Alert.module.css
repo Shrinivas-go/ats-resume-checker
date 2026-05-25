@@ -1,0 +1,119 @@
+/* ===========================================
+   Alert Component Styles
+   =========================================== */
+
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid;
+}
+
+/* ========================================
+   Icon
+   ======================================== */
+.icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ========================================
+   Content
+   ======================================== */
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.title {
+    font-weight: var(--font-semibold);
+    margin: 0 0 var(--space-1) 0;
+}
+
+.message {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+}
+
+/* ========================================
+   Close Button
+   ======================================== */
+.closeButton {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: inherit;
+    opacity: 0.7;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: opacity var(--transition-fast);
+}
+
+.closeButton:hover {
+    opacity: 1;
+}
+
+/* ========================================
+   Variants
+   ======================================== */
+
+/* Info */
+.info {
+    background-color: var(--purple-50);
+    border-color: var(--purple-200);
+    color: var(--purple-700);
+}
+
+[data-theme="dark"] .info {
+    background-color: rgba(109, 94, 243, 0.1);
+    border-color: var(--purple-700);
+    color: var(--purple-300);
+}
+
+/* Success */
+.success {
+    background-color: var(--success-light);
+    border-color: #86EFAC;
+    color: #166534;
+}
+
+[data-theme="dark"] .success {
+    background-color: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.3);
+    color: #4ADE80;
+}
+
+/* Warning */
+.warning {
+    background-color: var(--warning-light);
+    border-color: #FCD34D;
+    color: #92400E;
+}
+
+[data-theme="dark"] .warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #FBBF24;
+}
+
+/* Error */
+.error {
+    background-color: var(--error-light);
+    border-color: #FCA5A5;
+    color: #991B1B;
+}
+
+[data-theme="dark"] .error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #F87171;
+}

@@ -1,0 +1,76 @@
+/* ===========================================
+   Card Component Styles
+   =========================================== */
+
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-base);
+}
+
+/* ========================================
+   Padding Variants
+   ======================================== */
+.padding-none {
+    padding: 0;
+}
+
+.padding-sm {
+    padding: var(--space-4);
+}
+
+.padding-md {
+    padding: var(--space-6);
+}
+
+.padding-lg {
+    padding: var(--space-8);
+}
+
+/* ========================================
+   States
+   ======================================== */
+.hoverable:hover {
+    box-shadow: var(--shadow-card-hover);
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+/* ========================================
+   Compound Components
+   ======================================== */
+.header {
+    margin-bottom: var(--space-4);
+}
+
+.title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-1) 0;
+    line-height: var(--leading-tight);
+}
+
+.description {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: var(--leading-relaxed);
+}
+
+.content {
+    color: var(--text-primary);
+}
+
+.footer {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
