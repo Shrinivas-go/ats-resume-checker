@@ -300,7 +300,7 @@ export default function Landing() {
                                     Expert tips to boost your job search success.
                                 </p>
                             </div>
-                            <Link to="/blog">
+                            <Link to="/help">
                                 <Button variant="secondary" icon={BookOpen}>
                                     View All Articles
                                 </Button>
@@ -320,7 +320,7 @@ export default function Landing() {
                                     className={styles.blogCard}
                                     variants={staggerItem}
                                 >
-                                    <Link to="/blog" className={styles.blogImageWrapper}>
+                                    <Link to="/help" className={styles.blogImageWrapper}>
                                         <img
                                             src={post.image}
                                             alt={post.title}
@@ -334,7 +334,7 @@ export default function Landing() {
                                         </div>
                                         <h3 className={styles.blogTitle}>{post.title}</h3>
                                         <p className={styles.blogExcerpt}>{post.excerpt}</p>
-                                        <Link to="/blog" className={styles.blogLink}>
+                                        <Link to="/help" className={styles.blogLink}>
                                             Read more <ArrowRight size={14} />
                                         </Link>
                                     </div>

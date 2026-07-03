@@ -1,35 +1,21 @@
 const authService = require('../services/auth.service');
 const config = require('../config/env');
 
-/**
- * Cookie options for tokens
- * 
- * Production-grade settings:
- * - httpOnly: true - prevents XSS access to cookies
- * - secure: true in production - requires HTTPS
- * - sameSite: 'lax' for same-origin, 'none' for cross-origin
- * - domain: set for cross-subdomain support in production
- */
+// Cookie expiry durations (match JWT token lifetimes)
+const ACCESS_COOKIE_MAX_AGE = 15 * 60 * 1000;       // 15 minutes
+const REFRESH_COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+
 const getCookieOptions = (maxAge) => {
     const isProduction = config.env === 'production';
-
     return {
-        httpOnly: true,                                    // Prevents XSS
-        secure: isProduction,                              // HTTPS only in production
-        sameSite: isProduction ? 'none' : 'lax',          // Cross-origin support in production
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge,
-        path: '/',                                         // Available on all routes
+        path: '/',
     };
 };
 
-/**
- * Auth Controller - Production-grade authentication handlers
- * 
- * Features:
- * - Consistent error responses with HTTP status codes
- * - Proper cookie handling for cross-origin SaaS
- * - Comprehensive error logging
- */
 const authController = {
     /**
      * POST /auth/register
@@ -41,9 +27,8 @@ const authController = {
 
             const { user, tokens } = await authService.register({ name, email, password });
 
-            // Set cookies with proper options
-            res.cookie('accessToken', tokens.accessToken, getCookieOptions(15 * 60 * 1000)); // 15 min
-            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(7 * 24 * 60 * 60 * 1000)); // 7 days
+            res.cookie('accessToken', tokens.accessToken, getCookieOptions(ACCESS_COOKIE_MAX_AGE));
+            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(REFRESH_COOKIE_MAX_AGE));
 
             return res.status(201).json({
                 success: true,
@@ -75,9 +60,8 @@ const authController = {
 
             const { user, tokens } = await authService.login({ email, password });
 
-            // Set cookies
-            res.cookie('accessToken', tokens.accessToken, getCookieOptions(15 * 60 * 1000));
-            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(7 * 24 * 60 * 60 * 1000));
+            res.cookie('accessToken', tokens.accessToken, getCookieOptions(ACCESS_COOKIE_MAX_AGE));
+            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(REFRESH_COOKIE_MAX_AGE));
 
             return res.status(200).json({
                 success: true,
@@ -116,9 +100,8 @@ const authController = {
 
             const { tokens } = await authService.refreshToken(refreshToken);
 
-            // Set new cookies (token rotation - both tokens are new)
-            res.cookie('accessToken', tokens.accessToken, getCookieOptions(15 * 60 * 1000));
-            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(7 * 24 * 60 * 60 * 1000));
+            res.cookie('accessToken', tokens.accessToken, getCookieOptions(ACCESS_COOKIE_MAX_AGE));
+            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(REFRESH_COOKIE_MAX_AGE));
 
             return res.status(200).json({
                 success: true,
@@ -212,9 +195,9 @@ const authController = {
                 });
             }
 
-            // Decode the Google ID token (JWT)
-            // In production, you should verify this with Google's API
-            // For now, we decode and trust the payload (frontend already verified with Google)
+            // NOTE: We decode the Google JWT without server-side signature verification.
+            // The frontend already verifies the token with Google's OAuth library.
+            // For stronger security, use google-auth-library to verify on the server.
             const base64Url = credential.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             const payload = JSON.parse(Buffer.from(base64, 'base64').toString());
@@ -244,9 +227,8 @@ const authController = {
                 avatar,
             });
 
-            // Set cookies
-            res.cookie('accessToken', tokens.accessToken, getCookieOptions(15 * 60 * 1000));
-            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(7 * 24 * 60 * 60 * 1000));
+            res.cookie('accessToken', tokens.accessToken, getCookieOptions(ACCESS_COOKIE_MAX_AGE));
+            res.cookie('refreshToken', tokens.refreshToken, getCookieOptions(REFRESH_COOKIE_MAX_AGE));
 
             return res.status(200).json({
                 success: true,

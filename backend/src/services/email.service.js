@@ -1,5 +1,15 @@
 const nodemailer = require('nodemailer');
 
+// Escape user input before inserting into HTML emails
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
 /**
  * Email Service
  * Handles sending emails for support forms and notifications
@@ -55,13 +65,13 @@ async function sendSupportEmail(data) {
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2 style="color: #667eea;">New Support Request</h2>
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <p><strong>From:</strong> ${name}</p>
-                    <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-                    <p><strong>Subject:</strong> ${subject || 'General Inquiry'}</p>
+                    <p><strong>From:</strong> ${escapeHtml(name)}</p>
+                    <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+                    <p><strong>Subject:</strong> ${escapeHtml(subject) || 'General Inquiry'}</p>
                 </div>
                 <div style="padding: 20px; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;">
                     <h3 style="margin-top: 0; color: #374151;">Message:</h3>
-                    <p style="white-space: pre-wrap; color: #4b5563;">${message}</p>
+                    <p style="white-space: pre-wrap; color: #4b5563;">${escapeHtml(message)}</p>
                 </div>
                 <p style="color: #9ca3af; font-size: 12px; margin-top: 20px;">
                     This email was sent from the ATS Resume Checker support form.

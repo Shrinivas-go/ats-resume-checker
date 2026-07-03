@@ -92,16 +92,5 @@ router.post('/contact', async (req, res) => {
     }
 });
 
-/**
- * GET /support/status
- * Check if email is configured (for admin/debug)
- */
-router.get('/status', (req, res) => {
-    res.json({
-        success: true,
-        emailConfigured: isEmailConfigured(),
-        mode: isEmailConfigured() ? 'production' : 'development',
-    });
-});
 
 module.exports = router;

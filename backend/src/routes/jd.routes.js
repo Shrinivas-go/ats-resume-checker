@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { auth } = require('../middlewares/auth');
-const { checkCredits } = require('../middlewares/admin');
-const User = require('../models/User');
 
 /**
  * JD Generator Routes

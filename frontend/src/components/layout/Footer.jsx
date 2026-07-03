@@ -43,9 +43,8 @@ export default function Footer() {
                     <div className={styles.links}>
                         <h4>Company</h4>
                         <ul>
-                            <li><Link to="/about">About Us</Link></li>
-                            <li><Link to="/blog">Blog</Link></li>
-                            <li><Link to="/contact">Contact</Link></li>
+                            <li><Link to="/help">Help & Support</Link></li>
+                            <li><Link to="/pricing">Pricing</Link></li>
                         </ul>
                     </div>
 
@@ -53,8 +52,7 @@ export default function Footer() {
                     <div className={styles.links}>
                         <h4>Resources</h4>
                         <ul>
-                            <li><Link to="/docs">Documentation</Link></li>
-                            <li><Link to="/help">Help & Support</Link></li>
+                            <li><Link to="/jd-generator">JD Generator</Link></li>
                             <li><a href="mailto:support@atschecker.com"><Mail size={14} /> support@atschecker.com</a></li>
                         </ul>
                     </div>
@@ -63,9 +61,9 @@ export default function Footer() {
                 <div className={styles.bottom}>
                     <p>© 2026 ATS Checker. All rights reserved.</p>
                     <div className={styles.legalLinks}>
-                        <Link to="/docs">Privacy Policy</Link>
+                        <span>Privacy Policy</span>
                         <span>•</span>
-                        <Link to="/docs">Terms of Service</Link>
+                        <span>Terms of Service</span>
                     </div>
                 </div>
             </div>

@@ -36,11 +36,7 @@ export default function Navbar() {
         { to: '/analyze', label: 'Analyze' },
         { to: '/builder', label: 'Builder' },
         { to: '/pricing', label: 'Pricing' },
-        { to: '/blog', label: 'Blog' },
         { to: '/help', label: 'Help' },
-        { to: '/about', label: 'About' },
-        { to: '/contact', label: 'Contact' },
-        { to: '/docs', label: 'Docs' },
     ];
 
     const isActive = (path) => location.pathname === path;
@@ -147,13 +143,6 @@ export default function Navbar() {
                                         <Link to="/help" className={styles.dropdownItem}>
                                             <HelpCircle size={16} />
                                             <span>Help & Support</span>
-                                        </Link>
-                                    </DropdownMenu.Item>
-
-                                    <DropdownMenu.Item asChild>
-                                        <Link to="/blog" className={styles.dropdownItem}>
-                                            <BookOpen size={16} />
-                                            <span>Blog</span>
                                         </Link>
                                     </DropdownMenu.Item>
 

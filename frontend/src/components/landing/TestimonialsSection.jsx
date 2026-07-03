@@ -77,7 +77,7 @@ export default function TestimonialsSection() {
 
                 {/* Review Action Buttons */}
                 <div className={styles.actions}>
-                    <Link to="/blog">
+                    <Link to="/help">
                         <Button variant="secondary" icon={ArrowRight} iconPosition="right">
                             View More Reviews
                         </Button>

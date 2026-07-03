@@ -70,7 +70,7 @@ export default function FAQSection() {
                                         <div className={styles.answer}>
                                             <p>{faq.answer}</p>
                                             {faq.hasMore && (
-                                                <Link to="/blog" className={styles.readMore}>
+                                                <Link to="/help" className={styles.readMore}>
                                                     Read more <ArrowRight size={14} />
                                                 </Link>
                                             )}

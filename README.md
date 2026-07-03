@@ -201,6 +201,10 @@ ats-resume-checker/
 │   │   ├── middlewares/        # Auth, rate limiting, credit gating, validation
 │   │   ├── models/             # Mongoose schemas (User, Credit, ScanHistory)
 │   │   ├── routes/             # Express route definitions
+│   │   │   ├── ats.routes.js       # Resume parsing, ATS scoring, analysis
+│   │   │   ├── auth.routes.js      # Register, login, OAuth, refresh
+│   │   │   ├── credit.routes.js    # Credit purchase and history
+│   │   │   └── ...                 # profile, support, jd, assistant
 │   │   ├── services/           # Business logic (auth, credit, email, payment, token)
 │   │   └── validators/         # Zod input validation schemas
 │   ├── tests/                  # Unit + integration tests

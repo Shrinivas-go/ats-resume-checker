@@ -5,13 +5,8 @@ import { API_URL } from '../config/api';
 const AuthContext = createContext(undefined);
 
 /**
- * Simplified AuthContext - Production-grade, predictable auth
- * 
- * Principles:
- * - Single source of truth for user state
- * - No complex auto-refresh logic (refresh on explicit actions only)
- * - Clear loading states
- * - Predictable behavior
+ * Manages authentication state (login, register, logout, Google OAuth).
+ * Stores user data and provides auth methods to all child components.
  */
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
@@ -96,10 +91,7 @@ export function AuthProvider({ children }) {
     const register = async (name, email, password) => {
         try {
             setError(null);
-            console.log('DEBUG: API_URL is:', API_URL);
-            console.log('DEBUG: Calling /auth/register with:', { name, email });
             const response = await api.post('/auth/register', { name, email, password });
-            console.log('DEBUG: Response:', response.data);
 
             if (response.data.success) {
                 setUser(response.data.user);
@@ -107,8 +99,6 @@ export function AuthProvider({ children }) {
             }
             return { success: false, message: response.data.message };
         } catch (err) {
-            console.error('DEBUG: Error:', err);
-            console.error('DEBUG: Error response:', err.response?.data);
             const message = err.response?.data?.message || 'Registration failed';
             setError(message);
             return { success: false, message };

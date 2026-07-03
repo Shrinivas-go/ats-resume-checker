@@ -3,23 +3,11 @@ const User = require('../models/User');
 const { isAdminEmail } = require('./admin');
 
 /**
- * Authentication Middleware - Production-grade token verification
- * 
- * Features:
- * - Consistent 401 responses (never 500 for auth failures)
- * - Specific error messages for debugging
- * - DB-backed user validation
- * - Supports both cookie and header-based tokens
- * - Admin bypass detection
- */
-
-/**
- * Primary authentication middleware - verifies JWT access token
- * Returns 401 for all auth failures with specific error codes
+ * Verify JWT access token from header or cookie.
+ * Attaches user info to req.user on success.
  */
 const auth = async (req, res, next) => {
     try {
-        // Get token from Authorization header or cookie
         let token = null;
 
         const authHeader = req.headers.authorization;
@@ -37,13 +25,11 @@ const auth = async (req, res, next) => {
             });
         }
 
-        // Verify token - will throw specific errors for different failure modes
         let decoded;
         try {
             decoded = tokenService.verifyAccessToken(token);
-        } catch (tokenError) {
-            // Handle token-specific errors with appropriate codes
-            if (tokenError.code === 'TOKEN_EXPIRED') {
+        } catch (err) {
+            if (err.code === 'TOKEN_EXPIRED') {
                 return res.status(401).json({
                     success: false,
                     message: 'Access token has expired. Please refresh your session.',
@@ -52,13 +38,11 @@ const auth = async (req, res, next) => {
             }
             return res.status(401).json({
                 success: false,
-                message: tokenError.message || 'Invalid token.',
-                code: tokenError.code || 'TOKEN_INVALID',
+                message: err.message || 'Invalid token.',
+                code: err.code || 'TOKEN_INVALID',
             });
         }
 
-        // Validate user exists in database and is active
-        // This prevents tokens from working for deleted/deactivated users
         const user = await User.findById(decoded.userId);
 
         if (!user) {
@@ -77,22 +61,19 @@ const auth = async (req, res, next) => {
             });
         }
 
-        // Check if user is admin based on email
         const isAdmin = isAdminEmail(user.email);
 
-        // Attach user info to request for downstream handlers
         req.user = {
             id: user._id,
             email: user.email,
             role: user.role,
             isAdmin,
-            bypassPaywall: isAdmin, // Admins bypass all paywalls
+            bypassPaywall: isAdmin,
         };
 
         next();
     } catch (error) {
-        // Catch-all for unexpected errors - still return 401 for security
-        console.error('Auth middleware error:', error);
+        console.error('Auth middleware error:', error.message);
         return res.status(401).json({
             success: false,
             message: 'Authentication failed.',
@@ -102,9 +83,7 @@ const auth = async (req, res, next) => {
 };
 
 /**
- * Role authorization middleware
- * Must be used after auth middleware
- * @param {...string} roles - Allowed roles
+ * Role authorization — must be used after auth middleware.
  */
 const authorize = (...roles) => {
     return (req, res, next) => {
@@ -129,8 +108,7 @@ const authorize = (...roles) => {
 };
 
 /**
- * Optional auth - attaches user if token present, but doesn't require it
- * Useful for routes that show different content based on auth status
+ * Optional auth — attaches user if token is present, doesn't reject otherwise.
  */
 const optionalAuth = async (req, res, next) => {
     try {

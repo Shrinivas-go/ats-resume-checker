@@ -1,12 +1,6 @@
 /**
- * Centralized MongoDB Connection Utility
- * 
- * Features:
- * - Singleton pattern for single connection instance
- * - Exponential backoff retry logic (1s, 2s, 4s, 8s, 16s)
- * - Connection state tracking
- * - Graceful handling of temporary downtime
- * - Clear logging for connection states
+ * MongoDB connection with retry logic.
+ * Uses exponential backoff (1s, 2s, 4s...) up to 5 retries.
  */
 
 const mongoose = require('mongoose');
@@ -109,39 +103,9 @@ const isDbConnected = () => {
     return isConnected && mongoose.connection.readyState === 1;
 };
 
-/**
- * Wait for database connection with timeout
- * @param {number} timeoutMs - Maximum time to wait (default: 30 seconds)
- * @returns {Promise<boolean>} - Resolves to true when connected, false on timeout
- */
-const waitForConnection = async (timeoutMs = 30000) => {
-    if (isDbConnected()) {
-        return true;
-    }
 
-    const startTime = Date.now();
-
-    while (Date.now() - startTime < timeoutMs) {
-        if (isDbConnected()) {
-            return true;
-        }
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    return false;
-};
-
-/**
- * Get current connection state for health checks
- * @returns {string} 'connected' | 'connecting' | 'disconnected' | 'error'
- */
 const getConnectionState = () => {
-    const states = {
-        0: 'disconnected',
-        1: 'connected',
-        2: 'connecting',
-        3: 'disconnecting',
-    };
+    const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
     return states[mongoose.connection.readyState] || 'unknown';
 };
 
@@ -181,6 +145,5 @@ process.on('SIGINT', async () => {
 module.exports = {
     connectDB,
     isDbConnected,
-    waitForConnection,
     getConnectionState,
 };

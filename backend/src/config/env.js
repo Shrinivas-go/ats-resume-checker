@@ -1,7 +1,6 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Load environment variables
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const config = {
@@ -15,18 +14,16 @@ const config = {
     },
 
     jwt: {
-        accessSecret: process.env.JWT_ACCESS_SECRET || 'default-access-secret',
-        refreshSecret: process.env.JWT_REFRESH_SECRET || 'default-refresh-secret',
+        accessSecret: process.env.JWT_ACCESS_SECRET,
+        refreshSecret: process.env.JWT_REFRESH_SECRET,
         accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m',
         refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
     },
 
     cors: {
-        // Support multiple origins separated by comma
-        // Example: "http://localhost:5173,https://your-app.vercel.app"
-        frontendUrls: (process.env.FRONTEND_URL || 'http://localhost:5173,https://ats-resume-checker-coral.vercel.app')
+        frontendUrls: (process.env.FRONTEND_URL || 'http://localhost:5173')
             .split(',')
-            .map(url => url.trim().replace(/\/$/, '')) // Remove trailing slash
+            .map(url => url.trim().replace(/\/$/, ''))
             .filter(Boolean),
     },
 
