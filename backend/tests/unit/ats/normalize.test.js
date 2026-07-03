@@ -7,7 +7,7 @@
  * - Test alias mapping, case sensitivity, and de-duplication
  */
 
-const { normalizeSkills, SKILL_ALIASES } = require('../../../ats/normalize.utils');
+const { normalizeSkills, SKILL_ALIASES } = require('../../../ats/normalize');
 
 describe('normalizeSkills', () => {
     // =================== ALIAS MAPPING TESTS ===================

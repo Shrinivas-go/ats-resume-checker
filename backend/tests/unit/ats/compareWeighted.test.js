@@ -7,7 +7,7 @@
  * - Test core/optional skill separation
  */
 
-const { compareWeightedSkills } = require('../../../ats/compareWeighted.utils');
+const { compareWeightedSkills } = require('../../../ats/compare');
 
 describe('compareWeightedSkills', () => {
     // =================== BASIC MATCHING TESTS ===================

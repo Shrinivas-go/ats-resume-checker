@@ -1,8 +1,6 @@
-/**
- * MongoDB Memory Server Helper
- * Provides in-memory MongoDB instance for integration tests
- */
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const { connectDB } = require('../../src/config/database');
+const config = require('../../src/config/env');
 const mongoose = require('mongoose');
 
 let mongoServer;
@@ -15,10 +13,10 @@ async function connect() {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
 
-    // Configure mongoose
-    await mongoose.connect(mongoUri, {
-        // Mongoose 8+ doesn't need these options
-    });
+    // Configure mongoose via connectDB wrapper
+    process.env.MONGODB_URI = mongoUri;
+    config.mongodb.uri = mongoUri;
+    await connectDB();
 
     return mongoUri;
 }

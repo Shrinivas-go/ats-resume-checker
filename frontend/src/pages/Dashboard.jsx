@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { PieChart, Zap, Clock, Coins, FileText, TrendingUp, RefreshCw, ArrowRight } from 'lucide-react';
+import { PieChart, Clock, FileText, TrendingUp, RefreshCw, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';
 import styles from './Dashboard.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-/**
- * Dashboard - Dynamic hub with scan history, credits, and stats
- */
 export default function Dashboard() {
     const { user } = useAuth();
-    const [credits, setCredits] = useState(null);
     const [scans, setScans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({ totalScans: 0, avgScore: 0 });
@@ -25,30 +21,12 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
         setLoading(true);
         try {
-            // Fetch credits and scans in parallel
-            const [creditsRes, scansRes] = await Promise.all([
-                fetch(`${API_URL}/credits/balance`, { credentials: 'include' }),
-                fetch(`${API_URL}/credits/scans?limit=10`, { credentials: 'include' }),
-            ]);
+            const res = await fetch(`${API_URL}/ats/history?limit=10`, { credentials: 'include' });
+            const data = await res.json();
 
-            const creditsData = await creditsRes.json();
-            const scansData = await scansRes.json();
-
-            if (creditsData.success) {
-                setCredits(creditsData.credits);
-            }
-
-            if (scansData.success && scansData.scans) {
-                setScans(scansData.scans);
-                // Calculate stats
-                const validScores = scansData.scans.filter(s => s.score != null);
-                const avgScore = validScores.length > 0
-                    ? Math.round(validScores.reduce((sum, s) => sum + s.score, 0) / validScores.length)
-                    : 0;
-                setStats({
-                    totalScans: scansData.scans.length,
-                    avgScore,
-                });
+            if (data.success) {
+                setScans(data.scans || []);
+                setStats(data.stats || { totalScans: 0, avgScore: 0 });
             }
         } catch (err) {
             console.error('Error fetching dashboard data:', err);
@@ -102,19 +80,14 @@ export default function Dashboard() {
                     <div className={styles.cardsGrid}>
                         <motion.div className={styles.card} {...fadeIn} transition={{ delay: 0.1 }}>
                             <div className={styles.cardIcon} style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)' }}>
-                                <Coins size={24} />
+                                <CheckCircle2 size={24} />
                             </div>
                             <div className={styles.cardContent}>
-                                <span className={styles.cardLabel}>Credits</span>
-                                <span className={styles.cardValue}>
-                                    {loading ? '...' : credits ?? 0}
+                                <span className={styles.cardLabel}>Account Status</span>
+                                <span className={styles.cardValue} style={{ fontSize: 'var(--text-xl)', marginTop: '4px' }}>
+                                    Active (Free)
                                 </span>
                             </div>
-                            {credits !== null && credits < 3 && (
-                                <Link to="/pricing" className={styles.cardLink}>
-                                    Get more <ArrowRight size={14} />
-                                </Link>
-                            )}
                         </motion.div>
 
                         <motion.div className={styles.card} {...fadeIn} transition={{ delay: 0.2 }}>
@@ -200,7 +173,7 @@ export default function Dashboard() {
                 {/* Empty State */}
                 {!loading && scans.length === 0 && (
                     <section className={styles.emptySection}>
-                        <Zap size={48} className={styles.emptyIcon} />
+                        <ShieldAlert size={48} className={styles.emptyIcon} />
                         <h3>No scans yet</h3>
                         <p>Upload your resume to see your ATS score and improvement suggestions.</p>
                     </section>

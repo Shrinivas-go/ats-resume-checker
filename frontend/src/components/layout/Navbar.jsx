@@ -35,7 +35,6 @@ export default function Navbar() {
         { to: '/', label: 'Home' },
         { to: '/analyze', label: 'Analyze' },
         { to: '/builder', label: 'Builder' },
-        { to: '/pricing', label: 'Pricing' },
         { to: '/help', label: 'Help' },
     ];
 

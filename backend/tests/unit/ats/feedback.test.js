@@ -7,7 +7,7 @@
  * - Test all score ranges and recommendation logic
  */
 
-const { generateATSFeedback } = require('../../../ats/feedback.utils');
+const { generateATSFeedback } = require('../../../ats/feedback');
 
 describe('generateATSFeedback', () => {
     // =================== SUMMARY GENERATION TESTS ===================

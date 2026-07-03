@@ -8,7 +8,7 @@
  * - Same input → same output
  */
 
-const { calculateWeightedATSScore } = require('../../../ats/scoreWeighted.utils');
+const { calculateWeightedATSScore } = require('../../../ats/score');
 
 describe('calculateWeightedATSScore', () => {
     // =================== VALID INPUT TESTS ===================

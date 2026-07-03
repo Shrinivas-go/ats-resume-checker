@@ -1,11 +1,8 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/env');
 
-const ACCESS_TOKEN_EXPIRY = '15m';
-const REFRESH_TOKEN_EXPIRY = '7d';
-const CLOCK_TOLERANCE = 30; // seconds
+const CLOCK_TOLERANCE = 30; // seconds — accounts for minor server clock skew
 
-// Create an error with a code property for token failures
 function tokenError(message, code) {
     const err = new Error(message);
     err.code = code;
@@ -13,48 +10,24 @@ function tokenError(message, code) {
 }
 
 const tokenService = {
-    /**
-     * Generate access token
-     */
     generateAccessToken(userId, role = 'user') {
         if (!userId) throw new Error('userId is required');
-
         return jwt.sign(
-            {
-                userId,
-                role,
-                type: 'access',
-                iat: Math.floor(Date.now() / 1000), // Explicit issued-at time
-            },
+            { userId, role, type: 'access' },
             config.jwt.accessSecret,
-            {
-                expiresIn: config.jwt.accessExpiresIn || ACCESS_TOKEN_EXPIRY,
-            }
+            { expiresIn: config.jwt.accessExpiresIn }
         );
     },
 
-    /**
-     * Generate refresh token
-     */
     generateRefreshToken(userId) {
         if (!userId) throw new Error('userId is required');
-
         return jwt.sign(
-            {
-                userId,
-                type: 'refresh',
-                iat: Math.floor(Date.now() / 1000), // Explicit issued-at time
-            },
+            { userId, type: 'refresh' },
             config.jwt.refreshSecret,
-            {
-                expiresIn: config.jwt.refreshExpiresIn || REFRESH_TOKEN_EXPIRY,
-            }
+            { expiresIn: config.jwt.refreshExpiresIn }
         );
     },
 
-    /**
-     * Generate both access and refresh tokens
-     */
     generateTokens(userId, role = 'user') {
         return {
             accessToken: this.generateAccessToken(userId, role),
@@ -62,48 +35,28 @@ const tokenService = {
         };
     },
 
-    /**
-     * Verify access token
-     */
     verifyAccessToken(token) {
         if (!token) throw tokenError('No token provided', 'TOKEN_INVALID');
-
         try {
-            const decoded = jwt.verify(token, config.jwt.accessSecret, {
-                clockTolerance: CLOCK_TOLERANCE,
-            });
-
-            if (decoded.type !== 'access') {
-                throw tokenError('Invalid token type', 'TOKEN_INVALID');
-            }
-
+            const decoded = jwt.verify(token, config.jwt.accessSecret, { clockTolerance: CLOCK_TOLERANCE });
+            if (decoded.type !== 'access') throw tokenError('Invalid token type', 'TOKEN_INVALID');
             return decoded;
         } catch (error) {
-            if (error.code) throw error; // already our error
-            if (error.name === 'TokenExpiredError') throw tokenError('Access token has expired', 'TOKEN_EXPIRED');
+            if (error.code) throw error;
+            if (error.name === 'TokenExpiredError') throw tokenError('Access token expired', 'TOKEN_EXPIRED');
             throw tokenError('Invalid access token', 'TOKEN_INVALID');
         }
     },
 
-    /**
-     * Verify refresh token
-     */
     verifyRefreshToken(token) {
         if (!token) throw tokenError('No token provided', 'TOKEN_INVALID');
-
         try {
-            const decoded = jwt.verify(token, config.jwt.refreshSecret, {
-                clockTolerance: CLOCK_TOLERANCE,
-            });
-
-            if (decoded.type !== 'refresh') {
-                throw tokenError('Invalid token type', 'TOKEN_INVALID');
-            }
-
+            const decoded = jwt.verify(token, config.jwt.refreshSecret, { clockTolerance: CLOCK_TOLERANCE });
+            if (decoded.type !== 'refresh') throw tokenError('Invalid token type', 'TOKEN_INVALID');
             return decoded;
         } catch (error) {
             if (error.code) throw error;
-            if (error.name === 'TokenExpiredError') throw tokenError('Refresh token has expired', 'TOKEN_EXPIRED');
+            if (error.name === 'TokenExpiredError') throw tokenError('Refresh token expired', 'TOKEN_EXPIRED');
             throw tokenError('Invalid refresh token', 'TOKEN_INVALID');
         }
     },

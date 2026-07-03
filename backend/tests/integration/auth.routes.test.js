@@ -23,6 +23,7 @@ describe('Auth Routes Integration Tests', () => {
     // =================== SETUP & TEARDOWN ===================
 
     beforeAll(async () => {
+        jest.setTimeout(180000);
         // Connect to in-memory database
         await connect();
 
@@ -157,8 +158,23 @@ describe('Auth Routes Integration Tests', () => {
 
     describe('POST /auth/logout', () => {
         test('should logout successfully', async () => {
+            // Register and login to obtain a valid access token
+            await request(app)
+                .post('/auth/register')
+                .send(testUser);
+
+            const loginRes = await request(app)
+                .post('/auth/login')
+                .send({
+                    email: testUser.email,
+                    password: testUser.password,
+                });
+
+            const token = loginRes.body.tokens.accessToken;
+
             const response = await request(app)
-                .post('/auth/logout');
+                .post('/auth/logout')
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty('success', true);

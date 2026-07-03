@@ -15,13 +15,14 @@ describe('ATS Analysis Routes Integration Tests', () => {
     // =================== SETUP & TEARDOWN ===================
 
     beforeAll(async () => {
+        jest.setTimeout(180000);
         await connect();
 
         // Create minimal Express app for testing
         const express = require('express');
-        const { compareWeightedSkills } = require('../../ats/compareWeighted.utils');
-        const { calculateWeightedATSScore } = require('../../ats/scoreWeighted.utils');
-        const { generateATSFeedback } = require('../../ats/feedback.utils');
+        const { compareWeightedSkills } = require('../../ats/compare');
+        const { calculateWeightedATSScore } = require('../../ats/score');
+        const { generateATSFeedback } = require('../../ats/feedback');
 
         app = express();
         app.use(express.json());

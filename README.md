@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">📄 ATS Resume Checker</h1>
   <p align="center">
-    <strong>A full-stack SaaS application that scores resumes against job descriptions using a weighted ATS scoring engine.</strong>
+    <strong>A full-stack MERN portfolio application that scores resumes against job descriptions using a weighted ATS scoring engine.</strong>
   </p>
   <p align="center">
     <a href="#features">Features</a> •
@@ -29,7 +29,7 @@
 
 ATS Resume Checker helps job seekers optimize their resumes for Applicant Tracking Systems. Users upload a PDF resume, paste a job description, and receive a detailed ATS compatibility score with actionable feedback — including missing keywords, skills gap analysis, and improvement suggestions.
 
-The application is structured as a **monorepo** with a React frontend and Node.js/Express backend, featuring a **credit-based SaaS model** with integrated payment processing via Stripe and Razorpay.
+The application is structured as a **monorepo** with a React frontend and Node.js/Express backend, showcasing standard engineering practices for professional MERN development.
 
 ### Problem
 
@@ -74,12 +74,9 @@ This application provides a **weighted scoring algorithm** that differentiates b
 - **Secure Cookie Storage** — Refresh tokens stored in HTTP-only cookies
 - **User Profiles** — Customizable avatars, location, and account settings
 
-### Credit System & Payments
-- **Freemium Model** — 3 free credits on signup; first scan available without authentication
-- **Dual Payment Gateways** — Stripe (international) and Razorpay (India) integration
-- **Webhook Verification** — Server-side payment verification for both gateways
-- **Transaction History** — Complete audit trail of credit purchases, usage, and bonuses
-- **Scan History** — Track past analyses with scores and results
+### Scan History
+- **Analysis History** — Keep track of past resume scans, overall scores, and dates
+- **Dashboard Metrics** — Track total scanned resumes and average match scores over time
 
 ### Security & Performance
 - **Helmet.js** — HTTP security headers
@@ -111,7 +108,6 @@ This application provides a **weighted scoring algorithm** that differentiates b
 | **Backend** | Node.js 20, Express 5, Mongoose 9, Multer, pdf-parse, Zod |
 | **Database** | MongoDB Atlas |
 | **Authentication** | JWT (access + refresh tokens), Google OAuth 2.0, bcryptjs |
-| **Payments** | Stripe, Razorpay |
 | **Testing** | Jest, Supertest, MongoDB Memory Server, Vitest, React Testing Library, Playwright |
 | **Deployment** | Vercel (frontend), Render (backend), Render Blueprint |
 | **Security** | Helmet, CORS, express-rate-limit, cookie-parser |
@@ -124,49 +120,42 @@ This application provides a **weighted scoring algorithm** that differentiates b
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         CLIENT (React + Vite)                   │
-│  Landing → Auth → Dashboard → Resume Analysis → Resume Builder  │
-│                    ↕ Axios (JWT in headers, refresh in cookies)  │
-└────────────────────────────┬────────────────────────────────────┘
-                             │ HTTPS
-┌────────────────────────────▼────────────────────────────────────┐
+│  ┌────────────────────────────▼────────────────────────────────────┐
 │                     API SERVER (Express 5)                       │
 │                                                                  │
-│  ┌──────────┐  ┌──────────┐  ┌───────────┐  ┌───────────────┐  │
-│  │  Auth    │  │ Credits  │  │  Profile  │  │   Support     │  │
-│  │ Routes   │  │ Routes   │  │  Routes   │  │   Routes      │  │
-│  └────┬─────┘  └────┬─────┘  └─────┬─────┘  └───────┬───────┘  │
-│       │              │              │                │           │
-│  ┌────▼──────────────▼──────────────▼────────────────▼───────┐  │
+│       ┌──────────┐            ┌───────────┐                      │
+│       │  Auth    │            │  Profile  │                      │
+│       │ Routes   │            │  Routes   │                      │
+│       └────┬─────┘            └─────┬─────┘                      │
+│            │                        │                            │
+│  ┌─────────▼────────────────────────▼─────────────────────────┐  │
 │  │              MIDDLEWARE LAYER                              │  │
-│  │  auth · creditGate · rateLimiter · validate · admin       │  │
+│  │  auth · optionalAuth · rateLimiter · validate               │  │
 │  └───────────────────────┬───────────────────────────────────┘  │
 │                          │                                      │
 │  ┌───────────────────────▼───────────────────────────────────┐  │
-│  │              ATS ENGINE (12 modules)                       │  │
-│  │  parser · pdfExtract · jd · jdWeight · compare ·           │  │
-│  │  compareWeighted · score · scoreWeighted · feedback ·      │  │
+│  │              ATS ENGINE (9 modules)                        │  │
+│  │  parser · pdfExtract · jd · compare · score · feedback ·   │  │
 │  │  simulator · analyzer · normalize                          │  │
 │  └───────────────────────┬───────────────────────────────────┘  │
 │                          │                                      │
 │  ┌───────────────────────▼───────────────────────────────────┐  │
-│  │              AI ASSISTANT                                  │  │
-│  │  Intent Detection → Context Retrieval → Decision Engine    │  │
-│  │  → Response Generation                                     │  │
+│  │              AI ASSISTANT (3 modules)                      │  │
+│  │  intents.js · assistant.js · responses.js                 │  │
 │  └───────────────────────────────────────────────────────────┘  │
 │                                                                  │
 └────────────────────────────┬────────────────────────────────────┘
                              │
 ┌────────────────────────────▼────────────────────────────────────┐
 │                    MongoDB Atlas                                 │
-│         Users · Credits · ScanHistory                            │
-└──────────────────────────────────────────────────────────────────┘
+│                   Users · ScanHistory                            │
+└────────────────────────────┬────────────────────────────────────┘
                              │
-         ┌───────────────────┼───────────────────┐
-         ▼                   ▼                   ▼
-   ┌──────────┐       ┌──────────┐       ┌──────────┐
-   │  Stripe  │       │ Razorpay │       │  Google  │
-   │ Webhooks │       │ Webhooks │       │  OAuth   │
-   └──────────┘       └──────────┘       └──────────┘
+                             ▼
+                       ┌──────────┐
+                       │  Google  │
+                       │  OAuth   │
+                       └──────────┘
 ```
 
 ### Request Flow
@@ -185,27 +174,26 @@ This application provides a **weighted scoring algorithm** that differentiates b
 ```
 ats-resume-checker/
 ├── backend/
-│   ├── ats/                    # ATS scoring engine (12 modules)
-│   │   ├── parser.utils.js         # Resume text → structured data
-│   │   ├── pdfExtract.utils.js     # PDF → raw text extraction
-│   │   ├── jdWeight.utils.js       # JD → weighted skill extraction
-│   │   ├── compareWeighted.utils.js # Skill matching algorithm
-│   │   ├── scoreWeighted.utils.js   # Weighted score calculation
-│   │   ├── feedback.utils.js        # Actionable feedback generation
-│   │   ├── simulator.utils.js       # Score improvement simulation
-│   │   └── ...                      # normalize, compare, jd, score, analyzer
+│   ├── ats/                    # ATS scoring engine (9 modules)
+│   │   ├── parser.js               # Resume text → structured data
+│   │   ├── pdfExtract.js           # PDF → raw text extraction
+│   │   ├── jd.js                   # JD → weighted skill extraction
+│   │   ├── compare.js              # Skill matching algorithm
+│   │   ├── score.js                # Weighted score calculation
+│   │   ├── feedback.js             # Actionable feedback generation
+│   │   ├── simulator.js            # Score improvement simulation
+│   │   └── ...                      # normalize, analyzer
 │   ├── src/
-│   │   ├── ai/                 # AI assistant (intent → decision → response)
+│   │   ├── ai/                 # AI assistant (intents.js, assistant.js, responses.js)
 │   │   ├── config/             # Environment & database configuration
 │   │   ├── controllers/        # Request handlers
-│   │   ├── middlewares/        # Auth, rate limiting, credit gating, validation
-│   │   ├── models/             # Mongoose schemas (User, Credit, ScanHistory)
+│   │   ├── middlewares/        # Auth, rate limiting, validation
+│   │   ├── models/             # Mongoose schemas (User, ScanHistory)
 │   │   ├── routes/             # Express route definitions
 │   │   │   ├── ats.routes.js       # Resume parsing, ATS scoring, analysis
 │   │   │   ├── auth.routes.js      # Register, login, OAuth, refresh
-│   │   │   ├── credit.routes.js    # Credit purchase and history
-│   │   │   └── ...                 # profile, support, jd, assistant
-│   │   ├── services/           # Business logic (auth, credit, email, payment, token)
+│   │   │   └── ...                 # profile, jd, assistant
+│   │   ├── services/           # Business logic (auth, token)
 │   │   └── validators/         # Zod input validation schemas
 │   ├── tests/                  # Unit + integration tests
 │   └── index.js                # Express app entry point
@@ -303,11 +291,7 @@ npm run dev:frontend
 | `FRONTEND_URL` | Allowed CORS origins (comma-separated) | `http://localhost:5173` |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID | `your-client-id.apps.googleusercontent.com` |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | `your-client-secret` |
-| `STRIPE_SECRET_KEY` | Stripe secret key | `sk_test_...` |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook secret | `whsec_...` |
-| `RAZORPAY_KEY_ID` | Razorpay key ID | `rzp_test_...` |
-| `RAZORPAY_KEY_SECRET` | Razorpay key secret | `your-razorpay-secret` |
-| `ADMIN_EMAIL` | Admin email (bypasses credit limits) | `admin@example.com` |
+| `ADMIN_EMAIL` | Admin/tester email (optional) | `admin@example.com` |
 
 ### Frontend (`frontend/.env.local`)
 
@@ -418,7 +402,7 @@ A `render.yaml` blueprint is included for one-click Render deployment. See the d
 - [ ] **Multi-Format Resume Upload** — Support DOCX and TXT formats in addition to PDF
 - [ ] **Scan Comparison History** — Compare scores across multiple scans to track improvement over time
 - [ ] **Admin Dashboard** — Analytics panel for monitoring user activity and scan metrics
-- [ ] **Email Notifications** — Automated emails for scan results and credit purchase confirmations (Nodemailer is integrated)
+- [ ] **Email Notifications** — Automated emails for scan results and summary reports
 - [ ] **Resume Templates** — Pre-built ATS-friendly resume templates in the builder
 
 ---
@@ -427,12 +411,10 @@ A `render.yaml` blueprint is included for one-click Render deployment. See the d
 
 Building or studying this project demonstrates understanding of:
 
-- **Full-Stack SaaS Architecture** — Designing a monorepo with separate frontend and backend services, each independently deployable
+- **Full-Stack Application Architecture** — Designing a monorepo with separate frontend and backend services, each independently deployable
 - **Authentication Patterns** — Implementing JWT access/refresh token rotation, Google OAuth 2.0, and secure cookie handling
-- **Payment Gateway Integration** — Working with Stripe and Razorpay APIs including webhook verification for reliable payment processing
 - **Algorithm Design** — Building a weighted scoring algorithm that categorizes and compares skills with normalization and fuzzy matching
 - **AI/NLP Pipeline (Rule-Based)** — Implementing a multi-layer intent detection and response generation system without external AI APIs
-- **Credit-Based Monetization** — Designing a freemium model with credit tracking, transaction history, and gated features
 - **API Security** — Applying rate limiting, CORS configuration, Helmet headers, input validation (Zod), and file upload restrictions
 - **Testing Strategy** — Writing unit, integration, and E2E tests across both frontend and backend with in-memory database mocking
 - **Deployment & DevOps** — Configuring multi-service deployment with Render Blueprints and Vercel, including health checks and environment management

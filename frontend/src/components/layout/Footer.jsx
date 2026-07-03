@@ -35,7 +35,6 @@ export default function Footer() {
                         <ul>
                             <li><Link to="/analyze">Analyze Resume</Link></li>
                             <li><Link to="/builder">Resume Builder</Link></li>
-                            <li><Link to="/pricing">Pricing</Link></li>
                         </ul>
                     </div>
 
@@ -44,7 +43,6 @@ export default function Footer() {
                         <h4>Company</h4>
                         <ul>
                             <li><Link to="/help">Help & Support</Link></li>
-                            <li><Link to="/pricing">Pricing</Link></li>
                         </ul>
                     </div>
 

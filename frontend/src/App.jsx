@@ -8,7 +8,6 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Onboarding from './pages/Onboarding';
-import Pricing from './pages/Pricing';
 import Help from './pages/Help';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -30,7 +29,6 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/pricing" element={<Pricing />} />
             <Route path="/help" element={<Help />} />
 
             {/* Semi-protected (first scan free, then requires auth) */}

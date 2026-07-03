@@ -7,7 +7,7 @@
  * - Test skill matching with normalization
  */
 
-const { compareSkills } = require('../../../ats/compare.utils');
+const { compareSkills } = require('../../../ats/compare');
 
 describe('compareSkills', () => {
     // =================== BASIC MATCHING TESTS ===================

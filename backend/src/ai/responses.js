@@ -1,14 +1,4 @@
-/**
- * Response Templates
- * Structured, deterministic templates for each intent
- * 
- * Uses simple variable substitution - NO free-form generation
- */
-
-// =================== RESPONSE TEMPLATES ===================
-
 const TEMPLATES = {
-    // Domain refusal
     DOMAIN_REFUSAL: {
         message: `I can only assist with resume analysis and ATS optimization.
 
@@ -19,8 +9,6 @@ const TEMPLATES = {
 • "How well do I match this job?"`,
         type: 'refusal'
     },
-
-    // Score explanation
     SCORE_EXPLANATION: {
         EXCELLENT: `## Great News! 🎉
 
@@ -94,8 +82,6 @@ Your ATS score is **{{overallScore}}%** - this needs attention before applying.
 
 **Tip:** Focus on adding missing core skills from the job description.`
     },
-
-    // Skills gap
     SKILLS_GAP: {
         HIGH_URGENCY: `## Skills Gap Analysis ⚠️
 
@@ -146,8 +132,6 @@ Great news! You have most core skills covered.
 
 **Already Covered:** {{matchedCount}} of {{totalSkills}} required skills`
     },
-
-    // JD Match
     JD_MATCH: {
         STRONG_FIT: `## Strong Match! 🎯
 
@@ -203,8 +187,6 @@ Great news! You have most core skills covered.
 
 **Recommendation:** This role may require significant skill development. Consider roles that better match your current skillset, or focus on upskilling.`
     },
-
-    // Experience improvement
     EXPERIENCE_IMPROVE: `## Experience Section Feedback
 
 {{#hasWeakVerbs}}
@@ -228,8 +210,6 @@ Great news! You have most core skills covered.
 • Start each bullet with a strong action verb
 • Quantify achievements (numbers, percentages, metrics)
 • Focus on impact and results, not just duties`,
-
-    // Keyword suggestions
     KEYWORD_SUGGESTION: `## Keyword Suggestions 🔑
 
 **Must Add (High Priority):**
@@ -247,8 +227,6 @@ Great news! You have most core skills covered.
 **Already Included:** {{alreadyCount}} keywords
 
 **Impact:** {{estimatedImpact}} improvement expected`,
-
-    // Formatting feedback
     FORMATTING_FEEDBACK: `## Formatting Feedback
 
 {{#hasScore}}**Format Score:** {{formatScore}}%{{/hasScore}}
@@ -269,8 +247,6 @@ Great news! You have most core skills covered.
 {{#generalTips}}
 • {{.}}
 {{/generalTips}}`,
-
-    // Resume rewrite (requires LLM)
     RESUME_REWRITE: `## Rewrite Assistance
 
 I can help improve your resume text. Please provide the specific bullet point or section you'd like me to rewrite.
@@ -283,17 +259,160 @@ I can help improve your resume text. Please provide the specific bullet point or
 {{#guidelines}}
 • {{.}}
 {{/guidelines}}`,
-
-    // Clarification needed
     CLARIFICATION: `I'm not quite sure what you're asking. {{clarificationQuestion}}`,
-
-    // Error
     ERROR: `I encountered an issue: {{message}}
 
 Please try again or ask a different question about your resume.`
 };
 
-// =================== EXPORTS ===================
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((current, key) => {
+        return current && current[key] !== undefined ? current[key] : undefined;
+    }, obj);
+}
+
+function renderTemplate(template, data) {
+    if (!template || !data) return template || '';
+
+    let result = template;
+
+    const sectionRegex = /\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g;
+    result = result.replace(sectionRegex, (match, key, content) => {
+        const value = data[key];
+
+        if (Array.isArray(value)) {
+            if (value.length === 0) return '';
+            return value.map(item => {
+                if (typeof item === 'object') {
+                    return renderTemplate(content, { ...data, ...item });
+                }
+                return content.replace(/\{\{\.\}\}/g, item);
+            }).join('');
+        } else if (typeof value === 'object' && value !== null) {
+            return renderTemplate(content, { ...data, ...value });
+        } else if (value) {
+            return renderTemplate(content, data);
+        }
+        return '';
+    });
+
+    const variableRegex = /\{\{(\w+(?:\.\w+)*)\}\}/g;
+    result = result.replace(variableRegex, (match, path) => {
+        const value = getNestedValue(data, path);
+        if (value === undefined || value === null) return '';
+        if (Array.isArray(value)) return value.join(', ');
+        return String(value);
+    });
+
+    return result.trim();
+}
+
+function generateResponse(intent, context, decision) {
+    if (decision?.error) {
+        return renderTemplate(TEMPLATES.ERROR, { message: decision.message });
+    }
+
+    let template;
+    let data;
+
+    switch (intent) {
+        case 'SCORE_EXPLANATION':
+            template = TEMPLATES.SCORE_EXPLANATION[decision.category || 'MODERATE'];
+            data = {
+                overallScore: context.overallScore,
+                sectionBreakdown: context.sectionScores,
+                skills: context.sectionScores?.skills,
+                experience: context.sectionScores?.experience,
+                education: context.sectionScores?.education,
+                format: context.sectionScores?.format,
+                lowestSection: context.lowestSection,
+                highestSection: context.highestSection,
+                primaryIssue: decision.primaryIssue,
+                actionItems: decision.actionItems || []
+            };
+            break;
+
+        case 'SKILLS_GAP':
+            template = TEMPLATES.SKILLS_GAP[`${decision.urgency || 'MEDIUM'}_URGENCY`] || TEMPLATES.SKILLS_GAP.MEDIUM_URGENCY;
+            data = {
+                missingCoreCount: context.missingCoreSkills?.length || 0,
+                primaryFocus: decision.primaryFocus || [],
+                secondaryFocus: decision.secondaryFocus || [],
+                hasSecondary: (decision.secondaryFocus?.length || 0) > 0,
+                potentialScoreGain: decision.potentialScoreGain || 0,
+                matchedCount: context.matchedCoreSkills?.length || 0,
+                totalSkills: context.totalCoreSkills || 0
+            };
+            break;
+
+        case 'JD_MATCH':
+            template = TEMPLATES.JD_MATCH[decision.fitLevel || 'PARTIAL_FIT'];
+            data = {
+                matchPercentage: decision.matchPercentage,
+                matchedCount: decision.matchedCount,
+                totalRequired: decision.totalRequired,
+                topMatches: decision.topMatches || [],
+                topGaps: decision.topGaps || []
+            };
+            break;
+
+        case 'EXPERIENCE_IMPROVE':
+            template = TEMPLATES.EXPERIENCE_IMPROVE;
+            data = {
+                hasWeakVerbs: (context.weakVerbs?.length || 0) > 0,
+                weakVerbs: context.weakVerbs || [],
+                actionVerbs: decision.actionVerbs || [],
+                primaryIssues: decision.primaryIssues || []
+            };
+            break;
+
+        case 'KEYWORD_SUGGESTION':
+            template = TEMPLATES.KEYWORD_SUGGESTION;
+            data = {
+                mustAdd: decision.mustAdd || [],
+                niceToHave: decision.niceToHave || [],
+                hasNiceToHave: (decision.niceToHave?.length || 0) > 0,
+                alreadyCount: context.alreadyPresent?.length || 0,
+                estimatedImpact: decision.estimatedImpact || 'MODERATE'
+            };
+            break;
+
+        case 'FORMATTING_FEEDBACK':
+            template = TEMPLATES.FORMATTING_FEEDBACK;
+            data = {
+                hasScore: context.formatScore !== null && context.formatScore !== undefined,
+                formatScore: context.formatScore,
+                hasIssues: (decision.issues?.length || 0) > 0,
+                issues: decision.issues || [],
+                recommendations: decision.recommendations || [],
+                generalTips: decision.generalTips || []
+            };
+            break;
+
+        case 'RESUME_REWRITE':
+            template = TEMPLATES.RESUME_REWRITE;
+            data = {
+                hasWeakVerbs: (context.weakVerbs?.length || 0) > 0,
+                weakVerbs: context.weakVerbs?.join(', ') || '',
+                guidelines: decision.guidelines || []
+            };
+            break;
+
+        case 'OUT_OF_SCOPE':
+            return TEMPLATES.DOMAIN_REFUSAL.message;
+
+        case 'CLARIFICATION_NEEDED':
+            return renderTemplate(TEMPLATES.CLARIFICATION, {
+                clarificationQuestion: decision.clarificationQuestion
+            });
+
+        default:
+            return 'I can help you with your resume and ATS optimization. What would you like to know?';
+    }
+
+    return renderTemplate(template, data);
+}
+
 module.exports = {
-    TEMPLATES
+    generateResponse
 };

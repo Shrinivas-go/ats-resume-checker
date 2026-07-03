@@ -1,19 +1,14 @@
-const { extractWeightedJDSkills } = require('./jdWeight.utils');
-const { compareWeightedSkills } = require('./compareWeighted.utils');
-const { calculateWeightedATSScore } = require('./scoreWeighted.utils');
-const { generateATSFeedback } = require('./feedback.utils');
+const { extractWeightedJDSkills } = require('./jd');
+const { compareWeightedSkills } = require('./compare');
+const { calculateWeightedATSScore } = require('./score');
+const { generateATSFeedback } = require('./feedback');
 
 const WEAK_VERBS = [
     'worked', 'helped', 'assisted', 'responsible for', 'handled', 'made', 'did', 'got', 'used', 'tried'
 ];
 
-const STRONG_VERBS = [
-    'engineered', 'developed', 'architected', 'implemented', 'spearheaded', 'orchestrated', 'pioneered',
-    'accelerated', 'optimized', 'revitalized', 'automated', 'deployed', 'launched'
-];
-
 /**
- * Analyze Resume Quality beyond just skills
+ * Analyze resume layout, presence of sections and basic quality aspects
  */
 function analyzeResumeQuality(parsedResume) {
     const { personalInfo, experience, education, summary, projects, rawText } = parsedResume;
@@ -31,7 +26,6 @@ function analyzeResumeQuality(parsedResume) {
         improvements: []
     };
 
-    // 1. Contact Info Analysis (15 points)
     if (personalInfo.email) quality.sections.contact += 5;
     else quality.issues.push({ type: 'critical', message: 'Missing email address' });
 
@@ -41,7 +35,6 @@ function analyzeResumeQuality(parsedResume) {
     if (personalInfo.linkedin) quality.sections.contact += 5;
     else quality.improvements.push('Adding a LinkedIn profile link is recommended');
 
-    // 2. Section Presence (25 points)
     if (summary && summary.length > 0) quality.sections.summary = 5;
     else quality.improvements.push('Consider adding a professional summary');
 
@@ -53,12 +46,10 @@ function analyzeResumeQuality(parsedResume) {
 
     if (projects && projects.length > 0) quality.sections.projects = 5;
 
-    // 3. Content Analysis
     let weakVerbCount = 0;
     const lowerText = rawText ? rawText.toLowerCase() : '';
 
     WEAK_VERBS.forEach(verb => {
-        // Check if verb exists as whole word
         const regex = new RegExp(`\\b${verb}\\b`, 'gi');
         const matches = lowerText.match(regex);
         if (matches) weakVerbCount += matches.length;
@@ -68,29 +59,22 @@ function analyzeResumeQuality(parsedResume) {
         quality.improvements.push(`Found ${weakVerbCount} weak action verbs (e.g., "${WEAK_VERBS[0]}"). Replace with strong alternatives like "Engineered", "Optimized", "Spearheaded".`);
     }
 
-    // Calculate total quality score (Max 40 -> scaled to 100 for this component)
     const totalSectionScore = Object.values(quality.sections).reduce((a, b) => a + b, 0);
-    // Normalize to 100 max for quality component
     quality.score = Math.min(100, Math.round((totalSectionScore / 40) * 100));
 
     return quality;
 }
 
 /**
- * Comprehensive Resume Analysis
- * Combines Skill Match (70%) + Quality/Formatting (30%)
- * with Logic Gating for logical consistency.
+ * Perform comprehensive resume analysis combining matching and quality
  */
 function analyzeResume(parsedResume, jobDescription) {
-    // 1. Skill Match Analysis
     const { coreSkills, optionalSkills } = extractWeightedJDSkills(jobDescription);
     const skillComparison = compareWeightedSkills(parsedResume.skills || [], coreSkills, optionalSkills);
-    const skillResult = calculateWeightedATSScore(skillComparison); // Returns { atsScore: 0-100 }
+    const skillResult = calculateWeightedATSScore(skillComparison);
 
-    // 2. Quality Analysis
     const qualityAnalysis = analyzeResumeQuality(parsedResume);
 
-    // 3. Combined Score with Logic Gates
     const SKILL_WEIGHT = 0.7;
     const QUALITY_WEIGHT = 0.3;
 
@@ -99,31 +83,24 @@ function analyzeResume(parsedResume, jobDescription) {
     let scoreLabel = "";
     let summaryOverride = null;
 
-    // LOGIC GATE: If skill match is effectively zero, formatting cannot save the score.
     if (skillResult.atsScore < 10) {
-        // "Not Relevant" State
-        // Cap overall score at 15 to reflect "formatted properly but wrong job"
         finalScore = Math.min(Math.round(weightedScore), 15);
         scoreLabel = "Not Relevant";
         summaryOverride = "Your resume has poor alignment with this job description. Even with good formatting, the lack of core keywords prevents a passing score.";
     } else {
-        // Normal Scoring
         finalScore = Math.round(weightedScore);
-
-        // Determine Label
         if (finalScore >= 80) scoreLabel = "Excellent Match";
         else if (finalScore >= 60) scoreLabel = "Good Match";
         else if (finalScore >= 40) scoreLabel = "Fair Match";
         else scoreLabel = "Needs Work";
     }
 
-    // Generate specific feedback using the RELEVANCE score for skill details
     const skillFeedback = generateATSFeedback({ atsScore: skillResult.atsScore, ...skillComparison });
 
     return {
         success: true,
-        score: finalScore,           // The gated, weighted final score
-        scoreLabel: scoreLabel,      // UI Label for the ring
+        score: finalScore,
+        scoreLabel: scoreLabel,
         skillScore: skillResult.atsScore,
         qualityScore: qualityAnalysis.score,
         skills: {
@@ -134,7 +111,7 @@ function analyzeResume(parsedResume, jobDescription) {
         },
         quality: qualityAnalysis,
         feedback: {
-            summary: summaryOverride || skillFeedback.summary, // Use override if gated
+            summary: summaryOverride || skillFeedback.summary,
             skillRecommendations: skillFeedback.recommendations,
             improvements: qualityAnalysis.improvements,
             criticalIssues: qualityAnalysis.issues
