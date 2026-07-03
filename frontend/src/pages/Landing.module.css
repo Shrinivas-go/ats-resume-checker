@@ -89,11 +89,19 @@
     }
 }
 
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .highlight {
     color: transparent;
-    background: linear-gradient(to right, var(--purple-500), var(--purple-400));
+    background: linear-gradient(to right, var(--purple-200), var(--purple-400), var(--purple-500), var(--purple-300));
+    background-size: 300% 300%;
     -webkit-background-clip: text;
     background-clip: text;
+    animation: gradientShift 6s ease infinite;
 }
 
 .heroDescription {
@@ -326,9 +334,31 @@
     }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
     .featureGrid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .featureGrid > div:nth-child(1) {
+        grid-column: span 4;
+    }
+    .featureGrid > div:nth-child(2) {
+        grid-column: span 2;
+    }
+    .featureGrid > div:nth-child(3) {
+        grid-column: span 2;
+    }
+    .featureGrid > div:nth-child(4) {
+        grid-column: span 4;
+    }
+}
+
+@keyframes cardFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
     }
 }
 
@@ -338,11 +368,18 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    transition: transform var(--transition-medium);
+    transition: transform var(--transition-slow), box-shadow var(--transition-slow);
 }
 
+.featureGrid > div:nth-child(1) .featureCard { animation: cardFloat 8s ease-in-out infinite; }
+.featureGrid > div:nth-child(2) .featureCard { animation: cardFloat 9s ease-in-out infinite 1.5s; }
+.featureGrid > div:nth-child(3) .featureCard { animation: cardFloat 7.5s ease-in-out infinite 3s; }
+.featureGrid > div:nth-child(4) .featureCard { animation: cardFloat 10s ease-in-out infinite 0.75s; }
+
 .featureCard:hover {
-    transform: translateY(-4px);
+    animation-play-state: paused;
+    transform: translateY(-10px) !important;
+    box-shadow: 0 12px 30px rgba(52, 160, 164, 0.25), var(--shadow-card-hover);
 }
 
 .featureIcon {

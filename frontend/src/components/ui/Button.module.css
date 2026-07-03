@@ -57,16 +57,22 @@
     background-color: var(--purple-500);
     color: white;
     border-color: var(--purple-500);
+    box-shadow: var(--glow-primary);
+    transition: all var(--transition-base);
 }
 
 .primary:hover:not(:disabled) {
     background-color: var(--purple-600);
     border-color: var(--purple-600);
+    box-shadow: var(--glow-primary-hover);
+    transform: translateY(-1px);
 }
 
 .primary:active:not(:disabled) {
     background-color: var(--purple-700);
     border-color: var(--purple-700);
+    box-shadow: none;
+    transform: translateY(1px);
 }
 
 /* Secondary - Neutral outline */

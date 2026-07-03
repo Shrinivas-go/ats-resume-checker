@@ -40,8 +40,24 @@ body {
     font-size: var(--text-base);
     line-height: var(--leading-normal);
     color: var(--text-primary);
-    background-color: var(--bg-page);
-    transition: background-color var(--transition-base), color var(--transition-base);
+    background: var(--aurora-bg);
+    background-attachment: fixed;
+    background-size: cover;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Noise overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: var(--noise-overlay);
+    pointer-events: none;
+    z-index: 9999;
 }
 
 /* ============================================
@@ -185,13 +201,8 @@ button:disabled {
    SELECTION
    ============================================ */
 ::selection {
-    background-color: var(--purple-200);
-    color: var(--purple-900);
-}
-
-[data-theme="dark"] ::selection {
-    background-color: var(--purple-700);
-    color: var(--purple-100);
+    background-color: var(--purple-500);
+    color: white;
 }
 
 /* ============================================

@@ -5,18 +5,18 @@
 
 :root {
   /* ========================================
-     PURPLE BRAND SCALE (PRIMARY)
+     VIBRANT LIME-GREEN-TEAL-BLUE SCALE (PRIMARY)
      ======================================== */
-  --purple-50: #F4F3FF;
-  --purple-100: #E8E6FF;
-  --purple-200: #CFCBFF;
-  --purple-300: #B6B0FF;
-  --purple-400: #8F86FF;
-  --purple-500: #6D5EF3;  /* Primary brand color */
-  --purple-600: #5B4EDC;
-  --purple-700: #4A3FBF;
-  --purple-800: #3B3299;
-  --purple-900: #2C266F;
+  --purple-50: #f1fbe7;
+  --purple-100: #e2f7cf;
+  --purple-200: #d9ed92;  /* Lime Cream */
+  --purple-300: #b5e48c;  /* Light Green */
+  --purple-400: #99d98c;  /* Willow Green */
+  --purple-500: #34a0a4;  /* Primary brand: Tropical Teal */
+  --purple-600: #168aad;  /* Medium Teal */
+  --purple-700: #1a759f;  /* Medium Blue */
+  --purple-800: #1e6091;  /* Dark Blue-Teal */
+  --purple-900: #184e77;  /* Navy / Dark Teal Blue */
 
   /* ========================================
      STATUS COLORS (LIMITED USE)
@@ -130,85 +130,58 @@
   --max-width-lg: 1024px;
   --max-width-xl: 1280px;
   --max-width-2xl: 1536px;
+
+  /* ========================================
+     VIBRANT AURORA & GLASSMORPHISM TOKENS
+     ======================================== */
+  --aurora-bg: radial-gradient(circle at 10% 20%, rgba(217, 237, 146, 0.06) 0%, transparent 40%),
+               radial-gradient(circle at 80% 10%, rgba(52, 160, 164, 0.1) 0%, transparent 50%),
+               radial-gradient(circle at 40% 80%, rgba(26, 117, 159, 0.08) 0%, transparent 50%),
+               #090c13;
+  --noise-overlay: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
+  --backdrop-blur: blur(16px);
+  --glow-primary: 0 0 20px rgba(52, 160, 164, 0.35);
+  --glow-primary-hover: 0 0 30px rgba(52, 160, 164, 0.55);
 }
 
 /* ============================================
-   LIGHT MODE (Default)
+   SINGLE MODE: VIBRANT AURORA GLASSMORPHISM
    ============================================ */
 :root,
-[data-theme="light"] {
-  /* Backgrounds */
-  --bg-page: #F9FAFB;
-  --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F3F4F6;
-  --bg-surface-hover: #F9FAFB;
-  
-  /* Borders */
-  --border-default: #E5E7EB;
-  --border-strong: #D1D5DB;
-  --border-subtle: #F3F4F6;
-  
-  /* Text */
-  --text-primary: #0B0B0D;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
-  --text-inverted: #FFFFFF;
-  
-  /* Brand */
-  --brand-primary: var(--purple-500);
-  --brand-primary-hover: var(--purple-600);
-  --brand-primary-active: var(--purple-700);
-  --brand-subtle: var(--purple-50);
-  --brand-subtle-hover: var(--purple-100);
-  
-  /* Focus */
-  --focus-ring: var(--purple-300);
-  
-  /* Interactive */
-  --interactive-hover: rgba(0, 0, 0, 0.04);
-  --interactive-active: rgba(0, 0, 0, 0.08);
-  
-  /* Shadows (light mode specific) */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* ============================================
-   DARK MODE
-   ============================================ */
+[data-theme="light"],
 [data-theme="dark"] {
   /* Backgrounds */
-  --bg-page: #0F0F14;
-  --bg-surface: #1A1A23;
-  --bg-surface-secondary: #22222D;
-  --bg-surface-hover: #252530;
+  --bg-page: #080b11;
+  --bg-surface: rgba(18, 25, 41, 0.65); /* glass overlay */
+  --bg-surface-secondary: rgba(18, 25, 41, 0.8);
+  --bg-surface-hover: rgba(52, 160, 164, 0.12);
   
   /* Borders */
-  --border-default: #2A2A35;
-  --border-strong: #3A3A45;
-  --border-subtle: #1F1F28;
+  --border-default: rgba(255, 255, 255, 0.08); /* glass border */
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.04);
   
   /* Text */
-  --text-primary: #EDEDF0;
-  --text-secondary: #9CA3AF;
-  --text-tertiary: #6B7280;
-  --text-inverted: #0B0B0D;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-inverted: #080b11;
   
   /* Brand */
-  --brand-primary: var(--purple-400);
-  --brand-primary-hover: var(--purple-300);
-  --brand-primary-active: var(--purple-500);
-  --brand-subtle: rgba(109, 94, 243, 0.15);
-  --brand-subtle-hover: rgba(109, 94, 243, 0.25);
+  --brand-primary: var(--purple-500); /* Tropical Teal */
+  --brand-primary-hover: var(--purple-600);
+  --brand-primary-active: var(--purple-700);
+  --brand-subtle: rgba(52, 160, 164, 0.12);
+  --brand-subtle-hover: rgba(52, 160, 164, 0.22);
   
   /* Focus */
-  --focus-ring: var(--purple-400);
+  --focus-ring: var(--purple-500);
   
   /* Interactive */
   --interactive-hover: rgba(255, 255, 255, 0.04);
   --interactive-active: rgba(255, 255, 255, 0.08);
   
-  /* Shadows (dark mode specific) */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+  /* Shadows & Blurs */
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 8px 32px 0 rgba(52, 160, 164, 0.15);
 }
