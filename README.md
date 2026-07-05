@@ -121,11 +121,11 @@ VITE_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 
 | Dashboard (Upload) | Detailed Results |
 |-------------------|------------------|
-| ![Dashboard (Upload)](screenshots/dashboard-upload.png) | ![Detailed Results](screenshots/scan-results.png) |
+| ![Dashboard (Upload)](screenshots/dashboard-img.png) | ![Detailed Results](screenshots/results-img.png) |
 
 | How it Works | Login Modal |
 |----------------|--------------|
-| ![How it Works](screenshots/how-it-works.png) | ![Login Modal](screenshots/login-modal.png) |
+| ![How it Works](screenshots/how-it-works.png) | ![Login Modal](screenshots/login-img.png) |
 
 ## Future Improvements
 - **LLM Integration**: Implement OpenAI or Anthropic APIs for deeper semantic matching beyond keyword extraction.
