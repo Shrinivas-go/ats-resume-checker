@@ -27,7 +27,7 @@ ATS Resume Analyzer is a full-stack web application designed to help job seekers
 - **Tools**: ESLint, npm workspaces (Monorepo setup)
 
 ## Architecture
-![Architecture Diagram](docs/architecture.png)
+![Architecture Diagram](screenshots/architecture.png)
 
 **User** → **Frontend (React)** → **REST API (Express)** → **Backend Logic (PDF parsing & text matching)** → **Database (MongoDB)**
 
@@ -115,13 +115,17 @@ VITE_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 
 ## Screenshots
 
-| Landing Page | ATS Score Analysis |
-|-----------|------------------|
-| ![Landing Page](docs/screenshots/landing-page.png) | ![ATS Score Analysis](docs/screenshots/ats-score-analysis.png) |
+| Dashboard | Scan Options |
+|-----------|--------------|
+| ![Dashboard](screenshots/Screenshot%202026-07-04%20231531.png) | ![Scan Options](screenshots/Screenshot%202026-07-04%20231601.png) |
 
-| Resume Builder | AI Assistant |
-|-----------|------------------|
-| ![Resume Builder](docs/screenshots/resume-builder.png) | ![AI Assistant](docs/screenshots/ai-assistant.png) |
+| Analysis Overview | Detailed Results |
+|-------------------|------------------|
+| ![Analysis Overview](screenshots/Screenshot%202026-07-04%20231612.png) | ![Detailed Results](screenshots/Screenshot%202026-07-05%20234723.png) |
+
+| Authentication | Landing Page |
+|----------------|--------------|
+| ![Authentication](screenshots/Screenshot%202026-07-05%20234852.png) | ![Landing Page](screenshots/Screenshot%202026-07-05%20234929.png) |
 
 ## Future Improvements
 - **LLM Integration**: Implement OpenAI or Anthropic APIs for deeper semantic matching beyond keyword extraction.
