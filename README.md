@@ -115,17 +115,17 @@ VITE_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 
 ## Screenshots
 
-| Dashboard | Scan Options |
+| Landing Page | Features Overview |
 |-----------|--------------|
-| ![Dashboard](screenshots/Screenshot%202026-07-04%20231531.png) | ![Scan Options](screenshots/Screenshot%202026-07-04%20231601.png) |
+| ![Landing Page](screenshots/landing-hero.png) | ![Features Overview](screenshots/features-overview.png) |
 
-| Analysis Overview | Detailed Results |
+| Dashboard (Upload) | Detailed Results |
 |-------------------|------------------|
-| ![Analysis Overview](screenshots/Screenshot%202026-07-04%20231612.png) | ![Detailed Results](screenshots/Screenshot%202026-07-05%20234723.png) |
+| ![Dashboard (Upload)](screenshots/dashboard-upload.png) | ![Detailed Results](screenshots/scan-results.png) |
 
-| Authentication | Landing Page |
+| How it Works | Login Modal |
 |----------------|--------------|
-| ![Authentication](screenshots/Screenshot%202026-07-05%20234852.png) | ![Landing Page](screenshots/Screenshot%202026-07-05%20234929.png) |
+| ![How it Works](screenshots/how-it-works.png) | ![Login Modal](screenshots/login-modal.png) |
 
 ## Future Improvements
 - **LLM Integration**: Implement OpenAI or Anthropic APIs for deeper semantic matching beyond keyword extraction.
