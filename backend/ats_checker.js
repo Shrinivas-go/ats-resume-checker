@@ -117,19 +117,60 @@ function canonicalize(skillName) {
 /** Extract plain text from PDF buffer. */
 async function extractTextFromPdf(buffer) {
   if (!buffer || buffer.length === 0) {
-    throw new Error('PDF file is empty');
+    throw new Error('Hmm, this PDF file seems to be completely empty. Please make sure you saved it correctly.');
   }
   try {
     const data = await pdfParse(buffer);
-    return (data.text || '').trim();
+    const rawText = data.text || '';
+    return sanitizePdfText(rawText);
   } catch (err) {
-    throw new Error('Could not read this PDF. Export it again from Word/Google Docs as PDF, or try a different file.');
+    let reason = "We couldn't read the text in this PDF.";
+    if (err.message) {
+      const lowerMsg = err.message.toLowerCase();
+      if (lowerMsg.includes('password') || lowerMsg.includes('encrypted')) {
+        reason = "It looks like this PDF is password-protected or encrypted. Please unlock it and try again.";
+      } else if (lowerMsg.includes('invalid') || lowerMsg.includes('corrupt') || lowerMsg.includes('structure')) {
+        reason = "The file might be corrupted or not a valid PDF.";
+      } else {
+        reason = "It might be saved in an unusual format. Try exporting it again directly from Word or Google Docs as a standard PDF.";
+      }
+    }
+    throw new Error(`Oops! ${reason}`);
   }
 }
 
-/** Get section key from a line, robust to spaces between letters. */
+/** Sanitize extracted PDF text to improve ATS parsing accuracy */
+function sanitizePdfText(text) {
+  if (!text) return '';
+  
+  return text
+    // 1. Remove zero-width spaces and non-printable characters
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    // 2. Fix common PDF ligatures
+    .replace(/\uFB00/g, 'ff')
+    .replace(/\uFB01/g, 'fi')
+    .replace(/\uFB02/g, 'fl')
+    .replace(/\uFB03/g, 'ffi')
+    .replace(/\uFB04/g, 'ffl')
+    .replace(/\uFB05/g, 'st')
+    .replace(/\uFB06/g, 'st')
+    // 3. Normalize weird quotes and apostrophes
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    // 4. Normalize dashes and hyphens
+    .replace(/[\u2010-\u2015]/g, '-')
+    // 5. Normalize bullets (different kinds of dots, squares, etc.)
+    .replace(/[\u2022\u2023\u25E6\u2043\u2219]/g, '-')
+    // 6. Normalize non-breaking spaces to standard space
+    .replace(/\u00A0/g, ' ')
+    // 7. Clean up excessive whitespace/tabs without removing newlines
+    .replace(/[ \t]+/g, ' ')
+    .trim();
+}
+
+/** Get section key from a line, robust to spaces and punctuation. */
 function getSectionKey(line) {
-  const clean = line.replace(/\s+/g, '').toUpperCase();
+  const clean = line.replace(/[^A-Za-z]/g, '').toUpperCase();
   if (clean === 'SUMMARY' || clean === 'PROFESSIONALSUMMARY' || clean === 'PROFILE' || clean === 'ABOUTME') {
     return 'summary';
   }
@@ -186,9 +227,13 @@ function extractName(text) {
     if (line.includes('@') || line.includes('github.com') || line.includes('linkedin.com') || line.includes('+') || /\b(?:resume|cv|curriculum vitae)\b/i.test(line)) {
       continue;
     }
-    const words = line.split(/\s+/);
+    // Clean leading non-alphabetic characters (e.g., bullets, spaces)
+    const cleanLine = line.replace(/^[^a-zA-Z]+/, '').trim();
+    if (!cleanLine) continue;
+    
+    const words = cleanLine.split(/\s+/);
     if (words.length >= 2 && words.length <= 4 && words.every(w => /^[A-Z]/.test(w) || w.toLowerCase() === 'de')) {
-      return line;
+      return cleanLine;
     }
   }
   return null;

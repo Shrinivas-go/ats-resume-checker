@@ -390,7 +390,7 @@ app.get('/auth/me', authMiddleware, requireAuth, async (req, res) => {
 // Processes uploaded PDF resume and target Job Description text
 app.post('/api/analyze', optionalAuthMiddleware, upload.single('resume'), async (req, res) => {
     if (!req.file) {
-        return res.status(400).json({ success: false, message: 'Please upload a resume PDF file.' });
+        return res.status(400).json({ success: false, message: 'We couldn\'t find a file. Please select a resume PDF to upload.' });
     }
 
     const jobDescription = req.body.jobDescription || '';
@@ -405,7 +405,7 @@ app.post('/api/analyze', optionalAuthMiddleware, upload.single('resume'), async 
         if (!resumeText) {
             return res.status(422).json({
                 success: false,
-                message: 'No readable text in the PDF. Please check if your file is scanned or empty.'
+                message: 'We couldn\'t find any readable text in your resume. If this is a scanned image, please convert it to a text-based PDF (e.g., save directly from Word or Google Docs).'
             });
         }
 
@@ -470,7 +470,7 @@ app.post('/api/analyze', optionalAuthMiddleware, upload.single('resume'), async 
         return res.json(results);
     } catch (err) {
         console.error('Resume analysis error:', err);
-        return res.status(500).json({ success: false, message: err.message || 'Error occurred during scan.' });
+        return res.status(500).json({ success: false, message: err.message || 'An unexpected error occurred while analyzing your resume. Please try again.' });
     } finally {
         // Clean up the uploaded file to prevent disk fill-up
         if (fs.existsSync(filePath)) {
