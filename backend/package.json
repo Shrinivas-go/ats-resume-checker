@@ -30,6 +30,7 @@
     "mongoose": "^9.1.4",
     "multer": "^2.0.2",
     "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^6.1.200",
     "zod": "^4.3.6"
   },
   "devDependencies": {

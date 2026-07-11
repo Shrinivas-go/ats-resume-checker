@@ -421,7 +421,7 @@ app.post('/api/analyze', optionalAuthMiddleware, upload.single('resume'), async 
 
         // 4. Extract skills from Job Description and compare
         const { coreSkills, optionalSkills } = extractWeightedJDSkills(jobDescription);
-        const comparison = compareWeightedSkills(resumeSkills, coreSkills, optionalSkills);
+        const comparison = compareWeightedSkills(resumeSkills, coreSkills, optionalSkills, resumeText);
 
         // 5. Calculate Weighted ATS Score, Explanation, Gaps & Strengths
         const { atsScore, explanation, details, confidence } = calculateWeightedATSScore(comparison, resumeText, jobDescription, similarityScore);
