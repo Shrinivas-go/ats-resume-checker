@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import { jsPDF } from 'jspdf';
+import { useBackendStatus } from '../hooks/useBackendStatus';
+import BackendWarmupCard from './BackendWarmupCard';
 
 // SVG Score Ring component
 function ScoreRing({ score, size = 120 }) {
@@ -47,6 +49,9 @@ function ConfidenceBar({ value }) {
 }
 
 export default function Dashboard() {
+  const { isReady, isChecking } = useBackendStatus();
+  const backendDown = !isReady;
+
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState('');
   const [jobTitle, setJobTitle] = useState('');
@@ -497,11 +502,11 @@ export default function Dashboard() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || backendDown}
                 className="notion-btn notion-btn-primary"
                 style={{ padding: '0.9rem', fontSize: '1.05rem', fontWeight: '600', marginTop: '0.5rem' }}
               >
-                {loading ? 'Running match analyzer...' : 'Scan Resume'}
+                {backendDown ? 'Starting Server...' : loading ? 'Running match analyzer...' : 'Scan Resume'}
               </button>
             </form>
           ) : (
@@ -699,6 +704,8 @@ export default function Dashboard() {
 
         </div>
       </div>
+      {/* Backend warmup overlay */}
+      {isChecking && <BackendWarmupCard isReady={isReady} isChecking={isChecking} />}
     </div>
   );
 }

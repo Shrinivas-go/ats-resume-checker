@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
+import { useBackendStatus } from '../hooks/useBackendStatus';
+import BackendWarmupCard from './BackendWarmupCard';
 
 export default function AuthModal({ isOpen, mode, onClose, onSwitchMode }) {
   const { login, register, googleLogin } = useAuth();
@@ -10,10 +12,16 @@ export default function AuthModal({ isOpen, mode, onClose, onSwitchMode }) {
   const [formError, setFormError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Only poll when the modal is actually open
+  const { isReady, isChecking } = useBackendStatus({ enabled: isOpen });
+
   if (!isOpen) return null;
+
+  const backendDown = !isReady;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (backendDown) return;
     setFormError('');
     setLoading(true);
 
@@ -60,6 +68,13 @@ export default function AuthModal({ isOpen, mode, onClose, onSwitchMode }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Derive the submit button label
+  const getButtonLabel = () => {
+    if (backendDown) return 'Starting Server...';
+    if (loading) return 'Processing...';
+    return mode === 'login' ? 'Log In' : 'Sign Up';
   };
 
   return (
@@ -119,8 +134,8 @@ export default function AuthModal({ isOpen, mode, onClose, onSwitchMode }) {
             />
           </div>
 
-          <button type="submit" disabled={loading} className="notion-btn notion-btn-primary" style={{ width: '100%', marginTop: '0.5rem', padding: '0.75rem' }}>
-            {loading ? 'Processing...' : mode === 'login' ? 'Log In' : 'Sign Up'}
+          <button type="submit" disabled={loading || backendDown} className="notion-btn notion-btn-primary" style={{ width: '100%', marginTop: '0.5rem', padding: '0.75rem' }}>
+            {getButtonLabel()}
           </button>
         </form>
 
@@ -163,6 +178,9 @@ export default function AuthModal({ isOpen, mode, onClose, onSwitchMode }) {
           )}
         </div>
       </div>
+
+      {/* Backend warmup overlay — renders on top of modal when server is sleeping */}
+      {isChecking && <BackendWarmupCard isReady={isReady} isChecking={isChecking} />}
     </div>
   );
 }
